@@ -5,7 +5,8 @@
   "description": "Monorepo for @qrcode-js",
   "scripts": {
     "dev": "lerna run dev --parallel",
-    "test": "lerna run test --parallel"
+    "test": "lerna run test --parallel",
+    "install": "lerna bootstrap"
   },
   "workspaces": [
     "packages/*"
