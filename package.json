@@ -7,8 +7,11 @@
     "build": "lerna run build --parallel",
     "dev": "lerna run dev --parallel",
     "test": "lerna run test --parallel",
-    "install": "lerna bootstrap"
+    "install": "lerna bootstrap",
+    "update-readme": "node scripts/update-readme.js",
+    "preversion": "npm run update-readme"
   },
+  "type": "module",
   "workspaces": [
     "packages/*"
   ],
