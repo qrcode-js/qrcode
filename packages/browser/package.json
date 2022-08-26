@@ -1,6 +1,6 @@
 {
   "name": "@qrcode-js/browser",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "> ⚛️ &nbsp; If you're using React, please use [react-awesome-qr](https://github.com/AwesomeQR/react-awesome-qr).",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/qrcode-js/browser#readme",
   "dependencies": {
-    "@qrcode-js/core": "^0.1.0"
+    "@qrcode-js/core": "^0.2.0"
   },
   "devDependencies": {
     "concurrently": "^7.3.0",
