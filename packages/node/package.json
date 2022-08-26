@@ -1,0 +1,40 @@
+{
+  "name": "@qrcode-js/node",
+  "version": "0.1.0",
+  "description": "NodeJs wrapper for server rendering",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "bin": {
+    "qrcode": "lib/cli.js"
+  },
+  "scripts": {
+    "dev": "tsc -w --preserveWatchOutput",
+    "build": "tsc",
+    "test": "node lib/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qrcode-js/node.git"
+  },
+  "files": [
+    "lib"
+  ],
+  "keywords": [
+    "qr",
+    "qrcode",
+    "node"
+  ],
+  "type": "module",
+  "author": "qrcode-js team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/qrcode-js/node/issues"
+  },
+  "homepage": "https://github.com/qrcode-js/node#readme",
+  "dependencies": {
+    "@qrcode-js/core": "^0.1.0",
+    "arg": "^5.0.2",
+    "canvas": "^2.9.3",
+    "lodash": "^4.17.21"
+  }
+}
