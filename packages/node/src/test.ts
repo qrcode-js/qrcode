@@ -1,4 +1,4 @@
-import QRCodeNode from "./index.js";
+import QRCodeNode from ".";
 import { promises as fs } from "fs";
 
 async function init() {

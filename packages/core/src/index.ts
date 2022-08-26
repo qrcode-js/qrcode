@@ -1,5 +1,5 @@
-export * from "./qrcode.js";
+export * from "./qrcode";
 
-export { AwesomeQR } from "./awesome-qr.js";
+export { AwesomeQR } from "./awesome-qr";
 
-export type { Options } from "./types.js";
+export type { Options } from "./types";

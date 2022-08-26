@@ -1,6 +1,6 @@
-import { QRCodeModel, QRErrorCorrectLevel, QRUtil } from "./qrcode.js";
-import merge from "lodash/merge.js";
-import type { Options } from "./types.js";
+import { QRCodeModel, QRErrorCorrectLevel, QRUtil } from "./qrcode";
+import merge from "lodash/merge";
+import type { Options } from "./types";
 
 const defaultScale = 0.4;
 
