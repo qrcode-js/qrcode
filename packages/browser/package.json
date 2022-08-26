@@ -16,7 +16,7 @@
   },
   "files": [
     "lib",
-    "dist"
+    "dist/index.js"
   ],
   "repository": {
     "type": "git",
