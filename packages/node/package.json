@@ -18,7 +18,8 @@
     "url": "git+https://github.com/qrcode-js/node.git"
   },
   "files": [
-    "lib"
+    "lib",
+    "!**/test.*"
   ],
   "keywords": [
     "qr",
