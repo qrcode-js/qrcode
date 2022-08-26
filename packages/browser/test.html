@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <style>
+      canvas {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+    <script src="/browser/dist/dev.js"></script>
+    <script>
+      const canvas = document.getElementById("canvas");
+      const context = canvas.getContext("2d");
+      const myQR = QRCode.QRCodeBrowser(canvas, {
+        text: "https://github.com/qrcode-js/browser",
+        colorDark: "#005c66",
+        size: 450,
+        components: {
+          data: {
+            scale: 0.75,
+            round: 1,
+          },
+          finder: {
+            protectors: false,
+            round: 0.5,
+          },
+        },
+        gradient: (ctx, size) => {
+          const gradient = ctx.createLinearGradient(0, 0, size, 0);
+          gradient.addColorStop(0, "green");
+          gradient.addColorStop(0.5, "grey");
+          gradient.addColorStop(1, "red");
+          return gradient;
+        },
+        drawFunction: "telegram",
+        // drawFunction: (
+        //   canvasContext,
+        //   left,
+        //   top,
+        //   nSize,
+        //   scale,
+        //   round,
+        //   parameters,
+        //   otherCells
+        // ) => {
+        //   if (parameters.isTiming) {
+        //     QRCode.AwesomeQR._drawDot(canvasContext, left, top, nSize, scale, round);
+        //   }
+        // },
+      });
+      myQR.draw();
+    </script>
+  </body>
+</html>
