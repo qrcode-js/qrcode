@@ -10,7 +10,8 @@
   "scripts": {
     "dev": "tsc -w --preserveWatchOutput",
     "build": "tsc",
-    "test": "node lib/test.js"
+    "test": "node lib/test.js",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",

@@ -7,8 +7,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsc -w --preserveWatchOutput",
-    "build-lib": "tsc",
-    "build": "npm run build-lib",
+    "build": "tsc",
     "prepublishOnly": "npm run build"
   },
   "files": [
