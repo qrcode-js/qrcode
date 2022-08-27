@@ -1,7 +1,7 @@
 import arg from "arg";
 import set from "lodash/set";
 import { promises as fs } from "fs";
-import QRCodeNode from ".";
+import QRCodeNode from "./index.js";
 import type { Options } from "@qrcode-js/core";
 
 async function main(): Promise<void> {
