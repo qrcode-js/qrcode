@@ -14,6 +14,7 @@
     "build-lib": "tsc",
     "prepublishOnly": "npm run build"
   },
+  "unpkg": "./dist/index.js",
   "files": [
     "lib",
     "dist/index.js"
