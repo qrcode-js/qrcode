@@ -20,6 +20,10 @@
     "noUnusedParameters": true,
     "importsNotUsedAsValues": "error"
   },
+  "ts-node": {
+    "esm": true,
+    "transpileOnly": true
+  },
   "typeAcquisition": {
     "enable": true
   },
