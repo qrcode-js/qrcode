@@ -457,10 +457,12 @@ export class AwesomeQR {
 
     if (this.options.gradient !== undefined) {
       const gradient = this.options.gradient(mainCanvasContext, viewportSize);
-      mainCanvasContext.fillStyle = gradient;
-      mainCanvasContext.globalCompositeOperation = "source-in";
-      mainCanvasContext.fillRect(0, 0, viewportSize, viewportSize);
-      mainCanvasContext.globalCompositeOperation = "source-over";
+      if (gradient instanceof CanvasGradient) {
+        mainCanvasContext.fillStyle = gradient;
+        mainCanvasContext.globalCompositeOperation = "source-in";
+        mainCanvasContext.fillRect(0, 0, viewportSize, viewportSize);
+        mainCanvasContext.globalCompositeOperation = "source-over";
+      }
     }
 
     // Fill the margin
