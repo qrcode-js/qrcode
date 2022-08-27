@@ -56,7 +56,6 @@ async function generateAPIDocs() {
   // Strip last newline character
   code = code.slice(0, code.length - 1);
   code += "```\n";
-  await fs.writeFile("prova.md", code + text);
   return code + text;
 }
 
