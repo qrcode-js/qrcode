@@ -10,13 +10,6 @@ module.exports = {
         use: "ts-loader",
         exclude: /node_modules/,
       },
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        resolve: {
-          fullySpecified: false,
-        },
-      },
     ],
   },
   resolve: {
