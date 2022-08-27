@@ -1,7 +1,41 @@
 import ts from "typescript";
 import { promises as fs } from "fs";
 
+const doNotEditMessage =
+  "<!-- Auto-generated README. Do not edit directly -->\n";
+
 async function main() {
+  var [APIText, nodeDocs, browserDocs, coreDocTemplate, rootDocTemplate] =
+    await Promise.all([
+      generateAPIDocs(),
+      fs.readFile("./packages/node/README.md", {
+        encoding: "utf-8",
+      }),
+      fs.readFile("./packages/browser/README.md", {
+        encoding: "utf-8",
+      }),
+      fs.readFile("./doctemplate/core.md", {
+        encoding: "utf-8",
+      }),
+      fs.readFile("./doctemplate/root.md", {
+        encoding: "utf-8",
+      }),
+    ]);
+  coreDocTemplate = coreDocTemplate.replace("##API", "## API\n" + APIText);
+  rootDocTemplate = rootDocTemplate
+    .replace("##Core", coreDocTemplate)
+    .replace("##Node", "<br />\n\n" + nodeDocs)
+    .replace("##Browser", "<br />\n\n" + browserDocs);
+  await Promise.all([
+    fs.writeFile(
+      "./packages/core/README.md",
+      doNotEditMessage + coreDocTemplate
+    ),
+    fs.writeFile("./README.md", doNotEditMessage + rootDocTemplate),
+  ]);
+}
+
+async function generateAPIDocs() {
   const sourceCode = await fs.readFile("./packages/core/src/types.ts", {
     encoding: "utf-8",
   });
@@ -14,88 +48,99 @@ async function main() {
   var text = "";
   code += "```typescript\n";
   parser.forEachChild((n) => {
-    if (n.kind !== ts.SyntaxKind.TypeAliasDeclaration) return;
-    const name = n.name.escapedText;
-    if (n.type.kind === ts.SyntaxKind.TypeLiteral) {
-      code += "type " + name + " = {\n";
-      const members = [...n.type.members];
-      members.sort((a, b) => {
-        // Before required arguments and then alphabetically
-        if (a.questionToken && !b.questionToken) return 1;
-        if (!a.questionToken && b.questionToken) return -1;
-        return a.name.escapedText.localeCompare(b.name.escapedText);
-      });
-      members.forEach((m) => {
-        var type;
-        switch (m.type.kind) {
-          case ts.SyntaxKind.TypeLiteral:
-            type = codeTypeLiteral(m.type.members, sourceCode);
-            break;
-          case ts.SyntaxKind.UnionType:
-            type = "Union";
-            break;
-          case ts.SyntaxKind.FunctionType:
-            type = "Function";
-            break;
-          default:
-            type = sourceCode.substring(m.type.pos, m.type.end).trim();
-            break;
-        }
-        code += `  ${m.name.escapedText}${
-          m.questionToken ? "?" : ""
-        }: ${type};\n`;
-      });
-      members.forEach((m) => {
-        text += handleTypeLiteral(m, sourceCode);
-        if (m.type.kind === ts.SyntaxKind.TypeLiteral) {
-          m.type.members.forEach(
-            (k) =>
-              (text += handleTypeLiteral(k, sourceCode, m.name.escapedText))
-          );
-        }
-      });
-      code += "}\n";
-    } else if (n.type.kind === ts.SyntaxKind.UnionType) {
-      code += "type" + sourceCode.substring(n.name.pos, n.end) + "\n";
-    }
+    const [_code, _text] = handleParserChild(n, sourceCode);
+    if (_code === null || _text === null) return;
+    code += _code + "\n";
+    text += _text;
   });
+  // Strip last newline character
+  code = code.slice(0, code.length - 1);
   code += "```\n";
   await fs.writeFile("prova.md", code + text);
+  return code + text;
 }
 
-function codeTypeLiteral(members, sourceCode) {
-  var text = "{\n";
-  members.forEach((m) => {
-    var type;
-    switch (m.type.kind) {
-      case ts.SyntaxKind.UnionType:
-        type = "Union";
-        break;
-      case ts.SyntaxKind.FunctionType:
-        type = "Function";
-        break;
-      default:
-        type = sourceCode.substring(m.type.pos, m.type.end).trim();
-        break;
-    }
-    text += `    ${m.name.escapedText}${
-      m.questionToken ? "?" : ""
-    }: ${type};\n`;
-  });
-  text += "  }";
-  return text;
-}
-
-function handleTypeLiteral(obj, sourceCode, prefix) {
-  var type;
-  switch (obj.type.kind) {
-    case ts.SyntaxKind.TypeLiteral:
-      type = "object";
-      break;
-    default:
-      type = sourceCode.substring(obj.type.pos, obj.type.end).trim();
-      break;
+function handleParserChild(child, sourceCode) {
+  if (child.kind !== ts.SyntaxKind.TypeAliasDeclaration) return [null, null];
+  const name = child.name.escapedText;
+  var code = `type ${name} = `;
+  var text = "";
+  if (child.type.kind === ts.SyntaxKind.TypeLiteral) {
+    const [_code, _text] = handleTypeLiteral(child, sourceCode);
+    code += _code;
+    text += _text;
+  } else if (child.type.kind === ts.SyntaxKind.UnionType) {
+    code += sourceCode.substring(child.type.pos, child.type.end) + ";\n";
+    // No text
   }
+  return [code, text];
+}
+
+function handleTypeLiteral(child, sourceCode, prefix, indent = 0) {
+  const code = ["{"];
+  var text = "";
+  const members = [...child.type.members];
+  members.sort((a, b) => {
+    // First required arguments
+    // Last deprecated arguments
+    // and then alphabetically
+    if (a.questionToken && !b.questionToken) return 1;
+    if (!a.questionToken && b.questionToken) return -1;
+    const AisDeprecated = a.jsDoc?.[0].tags?.some(
+      (t) => t.tagName.escapedText == "deprecated"
+    );
+    const BisDeprecated = b.jsDoc?.[0].tags?.some(
+      (t) => t.tagName.escapedText == "deprecated"
+    );
+    if (AisDeprecated && !BisDeprecated) return 1;
+    if (!AisDeprecated && BisDeprecated) return -1;
+    return a.name.escapedText.localeCompare(b.name.escapedText);
+  });
+  members.forEach((m) => {
+    var codeType = "";
+    var textType = "";
+    if (m.type.kind === ts.SyntaxKind.TypeLiteral) {
+      text += createText(m, "Object", sourceCode, prefix);
+      const [_code, _text] = handleTypeLiteral(
+        m,
+        sourceCode,
+        m.name.escapedText,
+        indent + 2
+      );
+      codeType = _code;
+      text += _text;
+    } else {
+      textType = sourceCode.substring(m.type.pos, m.type.end).trim();
+      switch (m.type.kind) {
+        case ts.SyntaxKind.UnionType:
+          codeType = "Union";
+          break;
+        case ts.SyntaxKind.FunctionType:
+          codeType = "Function";
+          break;
+      }
+      text += createText(m, textType, sourceCode, prefix);
+    }
+    code.push(createCode(m, codeType || textType, indent));
+  });
+  code.push("}");
+  return [code.join("\n" + " ".repeat(indent)), text];
+}
+
+function createCode(member, type, indent) {
+  var code = [];
+  const deprecated = member.jsDoc?.[0].tags?.some(
+    (t) => t.tagName.escapedText == "deprecated"
+  );
+  code.push(
+    `  ${member.name.escapedText}${member.questionToken ? "?" : ""}: ${type};${
+      deprecated ? "  // DEPRECATED" : ""
+    }`
+  );
+  return code.join(" ".repeat(indent) + "\n");
+}
+
+function createText(obj, type, sourceCode, prefix) {
   if (type.startsWith("| ")) {
     type = type.slice(2);
   }
@@ -116,7 +161,7 @@ function handleJsDoc(obj) {
   const jsDoc = obj.jsDoc[0];
   jsDoc.tags?.forEach((t) => {
     text += "**" + t.tagName.escapedText + "**";
-    text += " `" + t.comment + "`";
+    if (t.comment) text += " `" + t.comment + "`";
     text += "\n\n";
   });
   text += jsDoc.comment + "\n\n";
