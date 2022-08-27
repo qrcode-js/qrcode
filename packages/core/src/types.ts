@@ -192,7 +192,18 @@ export type Options = {
   /**
    * Custom function to draw a custom shape as a dot in the QR.
    *
-   * Accepts a string or a custom function
+   * Accepts either a string or a custom function.
+   * As a string it currently accepts only "telegram" mode.
+   * As a function here are the parameters:
+   *
+   * - canvasContext: the current drawing context
+   * - left: how many cells are from the left margin
+   * - top: how many cells are from the top margin
+   * - nSize: size in pixels of a single cell
+   * - scale: scale of data blocks as provided in initial options
+   * - round: round of data block as provided in initial options
+   * - parameters: tell if the cell is special (timing or alignment) or regular
+   * - otherCells: tell if the neighbour cells are empty or full
    */
   drawFunction?:
     | "telegram"
@@ -216,9 +227,13 @@ export type Options = {
       ) => undefined);
 
   /**
-   * Custom function called at certain phases of drawing the QR
-   *
-   * Useful for customizing the canvas if is not supported by this library
+   * Custom function called at certain phases of drawing the QR.
+   * Useful for customizing the canvas if something is not supported by this library
+   * Actually called when:
+   * - starting painting foreground
+   * - end painting foreground
+   * - starting painting background
+   * - end painting background
    */
   onEvent?: (
     type: EventTypes,
