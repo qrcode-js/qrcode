@@ -10,6 +10,8 @@
 ![](https://img.shields.io/bundlephobia/min/@qrcode-js/browser?label=@qrcode-js/browser)
 
 ![](https://img.shields.io/github/license/qrcode-js/qrcode)
+![](https://img.shields.io/npm/dw/@qrcode-js/qrcode)
+![](https://img.shields.io/jsdelivr/npm/hw/@qrcode-js/qrcode)
 
 ## Disclaimer
 
