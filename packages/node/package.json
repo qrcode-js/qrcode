@@ -27,7 +27,8 @@
     "build": "tsc",
     "dev": "tsc -w --preserveWatchOutput",
     "prepublishOnly": "npm run build",
-    "test": "ts-node test.ts"
+    "test": "ts-node test.ts",
+    "test-precommit": "tsc -p ./tsconfig.lint-test.json && npm run test"
   },
   "type": "module",
   "types": "lib/index.d.ts",
