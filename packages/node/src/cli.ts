@@ -1,5 +1,5 @@
 import arg from "arg";
-import set from "lodash/set";
+import set from "lodash/set.js";
 import { promises as fs } from "fs";
 import QRCodeNode from "./index.js";
 import type { Options } from "@qrcode-js/core";
