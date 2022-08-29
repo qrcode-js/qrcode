@@ -40,14 +40,15 @@ async function main(): Promise<void> {
     throw "No output location passed";
   }
   // Force because it's checked its existance.
-  const output = args._[0]!;
+  const output = args._[0];
 
   const options: Partial<Options> = {};
 
-  for (let opt of args["--opt"]!) {
-    let equalPosition = opt.indexOf("=");
-    let key = opt.slice(0, equalPosition);
-    let value = opt.slice(equalPosition + 1);
+  const opts = args["--opt"] as string[];
+  for (const opt of opts) {
+    const equalPosition = opt.indexOf("=");
+    const key = opt.slice(0, equalPosition);
+    const value = opt.slice(equalPosition + 1);
     set<Options>(options, key, parseFloat(value) ? parseFloat(value) : value);
   }
 

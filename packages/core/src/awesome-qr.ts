@@ -41,7 +41,7 @@ export class AwesomeQR {
   };
 
   constructor(
-    canvas: HTMLCanvasElement | any,
+    canvas: never,
     createCanvas:
       | ((width: number, height: number) => HTMLCanvasElement)
       | Function,
@@ -57,15 +57,21 @@ export class AwesomeQR {
 
     this.options = _options as Required<Options>;
     this.canvas = canvas;
-    this.canvas.width = this.options.size!;
-    this.canvas.height = this.options.size!;
+    this.canvas.width = this.options.size;
+    this.canvas.height = this.options.size;
     this.canvasContext = this.canvas.getContext("2d");
     this.qrCode = new QRCodeModel(-1, this.options.qr.correctLevel);
-    if (Number.isInteger(this.options.qr.maskPattern)) {
-      this.qrCode.maskPattern = this.options.qr.maskPattern!;
+    if (
+      this.options.qr.maskPattern !== undefined &&
+      Number.isInteger(this.options.qr.maskPattern)
+    ) {
+      this.qrCode.maskPattern = this.options.qr.maskPattern;
     }
-    if (Number.isInteger(this.options.qr.version)) {
-      this.qrCode.typeNumber = this.options.qr.version!;
+    if (
+      this.options.qr.version !== undefined &&
+      Number.isInteger(this.options.qr.version)
+    ) {
+      this.qrCode.typeNumber = this.options.qr.version;
     }
     this.qrCode.addData(this.options.text);
     this.qrCode.make();
@@ -366,8 +372,8 @@ export class AwesomeQR {
       this.qrCode.typeNumber
     )!;
 
-    var logoSide: number = nCount / 2;
-    if (!!this.options.logo.image) {
+    let logoSide: number = nCount / 2;
+    if (this.options.logo.image) {
       const logoScale = Math.min(Math.max(this.options.logo.scale!, 0), 1);
       let logoMargin = this.options.logo.margin!;
       if (logoMargin < 0) {
@@ -506,7 +512,7 @@ export class AwesomeQR {
       totalSize - marginCeiled
     );
 
-    if (!!this.options.logo.image) {
+    if (this.options.logo.image) {
       const logoImage = await this.loadImage(this.options.logo.image!);
 
       const logoScale = Math.min(Math.max(this.options.logo.scale!, 0), 1);
@@ -546,7 +552,7 @@ export class AwesomeQR {
       this.options.onEvent("start-background", this.canvasContext, {});
     }
 
-    if (!!this.options.background.image) {
+    if (this.options.background.image) {
       const backgroundImage = await this.loadImage(
         this.options.background.image
       );
