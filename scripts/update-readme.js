@@ -21,7 +21,7 @@ async function main() {
         encoding: "utf-8",
       }),
     ]);
-  coreDocTemplate = coreDocTemplate.replace("##API", "## API\n" + APIText);
+  coreDocTemplate = coreDocTemplate.replace("##API", "## API\n\n" + APIText);
   rootDocTemplate = rootDocTemplate
     .replace("##Core", coreDocTemplate)
     .replace("##Node", "<br />\n\n" + nodeDocs)
@@ -29,9 +29,9 @@ async function main() {
   await Promise.all([
     fs.writeFile(
       "./packages/core/README.md",
-      doNotEditMessage + coreDocTemplate
+      doNotEditMessage + "\n" + coreDocTemplate
     ),
-    fs.writeFile("./README.md", doNotEditMessage + rootDocTemplate),
+    fs.writeFile("./README.md", doNotEditMessage + "\n" + rootDocTemplate),
   ]);
 }
 
@@ -55,18 +55,19 @@ async function generateAPIDocs() {
   });
   // Strip last newline character
   code = code.slice(0, code.length - 1);
-  code += "```\n";
+  code += "```\n\n";
+  text = text.slice(0, text.length - 2);
   return code + text;
 }
 
 function handleParserChild(child, sourceCode) {
   if (child.kind !== ts.SyntaxKind.TypeAliasDeclaration) return [null, null];
   const name = child.name.escapedText;
-  var code = `type ${name} = `;
+  var code = `type ${name} =`;
   var text = "";
   if (child.type.kind === ts.SyntaxKind.TypeLiteral) {
     const [_code, _text] = handleTypeLiteral(child, sourceCode);
-    code += _code;
+    code += " " + _code + ";";
     text += _text;
   } else if (child.type.kind === ts.SyntaxKind.UnionType) {
     code += sourceCode.substring(child.type.pos, child.type.end) + ";\n";

@@ -26,7 +26,5 @@ This is a Monorepo containing 3 packages (core, node and browser)
 [Support me here](https://ko-fi.com/ruggio)
 
 ##Core
-
 ##Node
-
 ##Browser

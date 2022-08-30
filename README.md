@@ -1,4 +1,5 @@
 <!-- Auto-generated README. Do not edit directly -->
+
 # QRCode
 
 ![](https://img.shields.io/npm/v/@qrcode-js/core?label=@qrcode-js/core)
@@ -42,6 +43,7 @@ There are no examples provided as this package alone doesn't make mush sense.
 If you're looking for examples, check out the wrappers (Node and Browser).
 
 ## API
+
 ```typescript
 type Options = {
   text: string;
@@ -76,14 +78,15 @@ type Options = {
   };
   size?: number;
   whiteMargin?: boolean;
-}
-type EventTypes = 
+};
+type EventTypes =
   | "start-foreground"
   | "end-foreground"
   | "start-background"
   | "end-background"
   | "final-canvas";
 ```
+
 ### text
 
 **Type** `string`
@@ -338,6 +341,7 @@ Size of margins around the QR code body in pixel.
 Custom function called at certain phases of drawing the QR.
 Useful for customizing the canvas if something is not supported by this library
 Actually called when:
+
 - starting painting foreground
 - end painting foreground
 - starting painting background
@@ -415,9 +419,6 @@ Use a white margin instead of a transparent one which reveals the background of 
 
 <hr />
 
-
-
-
 <br />
 
 # @qrcode-js/node
@@ -476,7 +477,6 @@ async function main() {
 }
 main().catch(console.error);
 ```
-
 
 <br />
 

@@ -232,6 +232,7 @@ export type Options = {
    * Custom function called at certain phases of drawing the QR.
    * Useful for customizing the canvas if something is not supported by this library
    * Actually called when:
+   *
    * - starting painting foreground
    * - end painting foreground
    * - starting painting background
