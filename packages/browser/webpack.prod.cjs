@@ -22,7 +22,4 @@ module.exports = {
     globalObject: "this",
     library: "QRCode",
   },
-  optimization: {
-    minimize: true,
-  },
 };
