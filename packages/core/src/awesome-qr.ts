@@ -81,7 +81,7 @@ export class AwesomeQR {
     this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
-  static _removeColor(canvasContext: CanvasRenderingContext2D) {
+  static _removePortion(canvasContext: CanvasRenderingContext2D) {
     const oldGlobalCompositeOperation = canvasContext.globalCompositeOperation;
     const oldFillStyle = canvasContext.fillStyle;
     canvasContext.globalCompositeOperation = "destination-out";
@@ -301,7 +301,7 @@ export class AwesomeQR {
       5 * size,
       2.5 * rounded * size
     );
-    AwesomeQR._removeColor(canvasContext);
+    AwesomeQR._removePortion(canvasContext);
     AwesomeQR._prepareRoundedCornerClip(
       canvasContext,
       (left + 2) * size,
