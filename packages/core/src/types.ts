@@ -124,7 +124,9 @@ export type Options = {
 
   /**
    * Function for creating a gradient as foreground color
+   *
    * Must return a CanvasGradient
+   *
    * Overrides colorDark option
    */
   gradient?: (ctx: CanvasRenderingContext2D, size: number) => CanvasGradient;

@@ -325,8 +325,17 @@ export class AwesomeQR {
     const rawViewportSize = rawSize - 2 * rawMargin;
     const margin = Math.ceil(rawMargin);
 
+    /**
+     * Size of a single dot
+     */
     const nSize = Math.ceil(rawViewportSize / nCount);
+    /**
+     * Internal size (no margin)
+     */
     const viewportSize = nSize * nCount;
+    /**
+     * Internal size + 2 * margin
+     */
     const size = viewportSize + 2 * margin;
 
     const mainCanvas = this.createCanvas(size, size);
