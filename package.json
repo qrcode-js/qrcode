@@ -4,7 +4,7 @@
   "private": true,
   "description": "Monorepo for @qrcode-js",
   "scripts": {
-    "build": "lerna run build --parallel",
+    "build": "lerna run build",
     "dev": "lerna run dev --parallel",
     "test": "lerna run test --parallel",
     "install": "lerna bootstrap",
