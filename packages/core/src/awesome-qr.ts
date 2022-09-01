@@ -420,7 +420,7 @@ export class AwesomeQR {
           }
         }
 
-        const bIsDark = this.qrCode.isDark(row, col);
+        const bIsDark = !!this.qrCode.isDark(row, col);
 
         if (bIsDark) {
           this._drawPoint(
@@ -465,7 +465,7 @@ export class AwesomeQR {
     this._drawFinder(mainCanvasContext, nCount - 7, 0, nSize);
     this._drawFinder(mainCanvasContext, 0, nCount - 7, nSize);
 
-    if (this.options.gradient !== undefined) {
+    if (typeof this.options.gradient === "function") {
       const gradient = this.options.gradient(mainCanvasContext, viewportSize);
       mainCanvasContext.fillStyle = gradient;
       mainCanvasContext.globalCompositeOperation = "source-in";
