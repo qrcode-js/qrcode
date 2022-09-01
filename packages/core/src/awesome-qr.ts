@@ -1,5 +1,6 @@
 import { QRCodeModel, QRErrorCorrectLevel, QRUtil } from "./qrcode.js";
 import merge from "lodash/merge.js";
+import cloneDeep from "lodash/cloneDeep.js";
 import type { Options } from "./types.js";
 
 const defaultScale = 0.4;
@@ -49,7 +50,7 @@ export class AwesomeQR {
     loadImage: Function,
     options: Options
   ) {
-    var _options = Object.assign({}, AwesomeQR.defaultOptions);
+    const _options = cloneDeep(AwesomeQR.defaultOptions);
 
     merge(_options, options);
 
