@@ -476,10 +476,10 @@ export class AwesomeQR {
     // Fill the margin
     if (this.options.whiteMargin) {
       mainCanvasContext.fillStyle = "#FFFFFF";
-      mainCanvasContext.fillRect(-margin, -margin, size, margin);
-      mainCanvasContext.fillRect(-margin, viewportSize, size, margin);
-      mainCanvasContext.fillRect(viewportSize, -margin, margin, size);
-      mainCanvasContext.fillRect(-margin, -margin, margin, size);
+      mainCanvasContext.fillRect(-margin, -margin, size - margin, margin);
+      mainCanvasContext.fillRect(viewportSize, -margin, margin, size - margin);
+      mainCanvasContext.fillRect(0, viewportSize, size - margin, margin);
+      mainCanvasContext.fillRect(-margin, 0, margin, size - margin);
     }
 
     if (!!this.options.logo.image) {
