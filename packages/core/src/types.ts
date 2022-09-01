@@ -12,12 +12,30 @@ export type Options = {
   size?: number;
 
   /**
-   * Size of margins around the QR code body in pixel.
-   *
-   * @defaultValue 20
+   * Margin options
    */
-  margin?: number;
+  margin?: {
+    /**
+     * Size of margins around the QR code body in pixel.
+     *
+     * @defaultValue 20
+     */
+    size?: number;
+    /**
+     * Color of the margins.
+     *
+     * Accepts a CSS &lt;color&gt;.
+     *
+     * For more information about CSS &lt;color&gt;, please refer to [https://developer.mozilla.org/en-US/docs/Web/CSS/color_value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
+     *
+     * @defaultValue "transparent"
+     */
+    color?: string;
+  };
 
+  /**
+   * QR options
+   */
   qr?: {
     /**
      * Error correction level of the QR code.
@@ -95,18 +113,7 @@ export type Options = {
    *
    * @defaultValue "#000000"
    */
-  colorDark?: string;
-
-  /**
-   * Color of the empty areas on the QR code.
-   *
-   * Accepts a CSS &lt;color&gt;.
-   *
-   * For more information about CSS &lt;color&gt;, please refer to [https://developer.mozilla.org/en-US/docs/Web/CSS/color_value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
-   *
-   * @defaultValue "#ffffff"
-   */
-  colorLight?: string;
+  color?: string;
 
   /**
    * Automatically calculate the _colorLight_ value from the QR code's background.
@@ -152,6 +159,13 @@ export type Options = {
      * @defaultValue "rgba(0, 0, 0, 0)"
      */
     dimming?: string;
+
+    /**
+     * Color of the background of the QR.
+     *
+     * Goes behind an eventually image with `background.image` option
+     */
+    color?: string;
   };
 
   /**

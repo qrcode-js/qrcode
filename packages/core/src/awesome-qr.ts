@@ -23,15 +23,13 @@ export class AwesomeQR {
   static defaultOptions: Options = {
     text: "",
     size: 400,
-    margin: 20,
-    colorDark: "#000000",
-    colorLight: "rgba(0,0,0,0)",
+    margin: { size: 20, color: "transparent" },
+    color: "#000000",
     qr: {
       correctLevel: QRErrorCorrectLevel.M,
     },
-    background: { dimming: "rgba(0,0,0,0)" },
+    background: { dimming: "rgba(0,0,0,0)", color: "rgba(0,0,0,0)" },
     logo: { scale: 0.2, margin: 10, round: 0.4 },
-    whiteMargin: false,
     autoColor: true,
     dots: {
       scale: 1,
@@ -325,7 +323,7 @@ export class AwesomeQR {
     /**
      * Original margin
      */
-    let margin = this.options.margin!;
+    let margin = this.options.margin.size!;
 
     if (margin < 0 || margin * 2 >= size) {
       margin = 0;
@@ -349,7 +347,7 @@ export class AwesomeQR {
     const mainCanvas = this.createCanvas(totalSize, totalSize);
     const mainCanvasContext: CanvasRenderingContext2D =
       mainCanvas.getContext("2d");
-    mainCanvasContext.fillStyle = this.options.colorDark!;
+    mainCanvasContext.fillStyle = this.options.color!;
 
     this._clear();
 
@@ -482,33 +480,31 @@ export class AwesomeQR {
     }
 
     // Fill the margin
-    if (this.options.whiteMargin) {
-      mainCanvasContext.fillStyle = "#FFFFFF";
-      mainCanvasContext.fillRect(
-        -marginCeiled,
-        -marginCeiled,
-        totalSize - marginCeiled,
-        marginCeiled
-      );
-      mainCanvasContext.fillRect(
-        viewportSize,
-        -marginCeiled,
-        marginCeiled,
-        totalSize - marginCeiled
-      );
-      mainCanvasContext.fillRect(
-        0,
-        viewportSize,
-        totalSize - marginCeiled,
-        marginCeiled
-      );
-      mainCanvasContext.fillRect(
-        -marginCeiled,
-        0,
-        marginCeiled,
-        totalSize - marginCeiled
-      );
-    }
+    mainCanvasContext.fillStyle = this.options.margin.color!;
+    mainCanvasContext.fillRect(
+      -marginCeiled,
+      -marginCeiled,
+      totalSize - marginCeiled,
+      marginCeiled
+    );
+    mainCanvasContext.fillRect(
+      viewportSize,
+      -marginCeiled,
+      marginCeiled,
+      totalSize - marginCeiled
+    );
+    mainCanvasContext.fillRect(
+      0,
+      viewportSize,
+      totalSize - marginCeiled,
+      marginCeiled
+    );
+    mainCanvasContext.fillRect(
+      -marginCeiled,
+      0,
+      marginCeiled,
+      totalSize - marginCeiled
+    );
 
     if (!!this.options.logo.image) {
       const logoImage = await this.loadImage(this.options.logo.image!);
@@ -552,17 +548,18 @@ export class AwesomeQR {
 
     if (!!this.options.background.image) {
       const backgroundImage = await this.loadImage(
-        this.options.background.image!
+        this.options.background.image
       );
 
       const backgroundDimming = this.options.background.dimming!;
 
+      // Actually I don't know if autoColor functionality is useful.
       if (this.options.autoColor) {
         const avgRGB = AwesomeQR._getAverageRGB(
           this.createCanvas,
           backgroundImage
         );
-        this.options.colorDark = `rgb(${avgRGB.r},${avgRGB.g},${avgRGB.b})`;
+        this.options.color = `rgb(${avgRGB.r},${avgRGB.g},${avgRGB.b})`;
       }
 
       this.canvasContext.drawImage(backgroundImage, 0, 0, totalSize, totalSize);
@@ -571,7 +568,7 @@ export class AwesomeQR {
       this.canvasContext.fill();
     } else {
       this.canvasContext.rect(0, 0, totalSize, totalSize);
-      this.canvasContext.fillStyle = this.options.colorLight!;
+      this.canvasContext.fillStyle = this.options.background.color!;
       this.canvasContext.fill();
     }
 

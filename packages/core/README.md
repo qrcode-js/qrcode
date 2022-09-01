@@ -22,11 +22,11 @@ type Options = {
   text: string;
   autoColor?: boolean;
   background?: {
+    color?: string;
     dimming?: string;
     image?: Union;
   };
-  colorDark?: string;
-  colorLight?: string;
+  color?: string;
   dots?: {
     round?: number;
     scale?: number;
@@ -42,7 +42,10 @@ type Options = {
     round?: number;
     scale?: number;
   };
-  margin?: number;
+  margin?: {
+    color?: string;
+    size?: number;
+  };
   onEvent?: Function;
   qr?: {
     correctLevel?: number;
@@ -88,6 +91,16 @@ Background options
 
 <hr />
 
+### background.color
+
+**Type** `string`
+
+Color of the background of the QR.
+
+Goes behind an eventually image with `background.image` option
+
+<hr />
+
 ### background.dimming
 
 **Type** `string`
@@ -112,27 +125,13 @@ Accepts a `data:` string in web browsers or a Buffer in Node.js.
 
 <hr />
 
-### colorDark
+### color
 
 **Type** `string`
 
 **defaultValue** `"#000000"`
 
 Color of the blocks on the QR code.
-
-Accepts a CSS &lt;color&gt;.
-
-For more information about CSS &lt;color&gt;, please refer to [https://developer.mozilla.org/en-US/docs/Web/CSS/color_value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
-
-<hr />
-
-### colorLight
-
-**Type** `string`
-
-**defaultValue** `"#ffffff"`
-
-Color of the empty areas on the QR code.
 
 Accepts a CSS &lt;color&gt;.
 
@@ -279,6 +278,28 @@ Ratio of the logo size to the QR code size.
 
 ### margin
 
+**Type** `Object`
+
+Margin options
+
+<hr />
+
+### margin.color
+
+**Type** `string`
+
+**defaultValue** `"transparent"`
+
+Color of the margins.
+
+Accepts a CSS &lt;color&gt;.
+
+For more information about CSS &lt;color&gt;, please refer to [https://developer.mozilla.org/en-US/docs/Web/CSS/color_value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
+
+<hr />
+
+### margin.size
+
 **Type** `number`
 
 **defaultValue** `20`
@@ -305,6 +326,8 @@ Actually called when:
 ### qr
 
 **Type** `Object`
+
+QR options
 
 <hr />
 
