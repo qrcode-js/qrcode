@@ -23,10 +23,10 @@
   },
   "scripts": {
     "build": "npm run build-lib && npm run build-dist",
-    "build-dist": "webpack -c webpack.prod.cjs",
+    "build-dist": "webpack -c webpack.prod.js",
     "build-lib": "tsc",
     "dev": "concurrently --kill-others -n lib,dist \"npm run dev-lib\" \"npm run dev-dist\"",
-    "dev-dist": "webpack -c webpack.dev.cjs",
+    "dev-dist": "webpack -c webpack.dev.js",
     "dev-lib": "tsc -w --preserveWatchOutput",
     "prepublishOnly": "npm run build"
   },

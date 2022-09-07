@@ -1,7 +1,7 @@
-const path = require("path");
+import path from "path";
 
-module.exports = {
-  mode: "development",
+export default {
+  mode: "production",
   entry: "./src/index.ts",
   module: {
     rules: [
@@ -15,10 +15,9 @@ module.exports = {
   resolve: {
     extensions: [".ts", ".js"],
   },
-  watch: true,
   output: {
-    path: path.resolve(__dirname, "./dist"),
-    filename: "dev.js",
+    path: path.resolve(path.dirname(import.meta.url).slice(8), "./dist"),
+    filename: "index.js",
     libraryTarget: "umd",
     globalObject: "this",
     library: "QRCode",
