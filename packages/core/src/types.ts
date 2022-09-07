@@ -116,13 +116,6 @@ export type Options = {
   color?: string;
 
   /**
-   * Automatically calculate the _colorLight_ value from the QR code's background.
-   *
-   * @defaultValue true
-   */
-  autoColor?: boolean;
-
-  /**
    * Function for creating a gradient as foreground color
    *
    * Must return a CanvasGradient

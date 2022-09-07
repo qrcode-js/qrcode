@@ -26,7 +26,6 @@ export class AwesomeQR {
     },
     background: { dimming: "rgba(0,0,0,0)", color: "rgba(0,0,0,0)" },
     logo: { scale: 0.2, margin: 10, round: 0.4 },
-    autoColor: true,
     dots: {
       scale: 1,
       round: 0,
@@ -109,63 +108,6 @@ export class AwesomeQR {
     canvasContext.arcTo(x, y + h, x, y, r);
     canvasContext.arcTo(x, y, x + w, y, r);
     canvasContext.closePath();
-  }
-
-  private static _getAverageRGB(
-    createCanvas: (width: number, height: number) => any,
-    image: any
-  ) {
-    const blockSize = 5;
-    const defaultRGB = {
-      r: 0,
-      g: 0,
-      b: 0,
-    };
-    let i = -4;
-    const rgb = {
-      r: 0,
-      g: 0,
-      b: 0,
-    };
-    let count = 0;
-
-    const height = image.naturalHeight || image.height;
-    const width = image.naturalWidth || image.width;
-
-    const canvas = createCanvas(width, height);
-    const context = canvas.getContext("2d");
-
-    if (!context) {
-      return defaultRGB;
-    }
-
-    context.drawImage(image, 0, 0);
-
-    let data;
-    try {
-      data = context.getImageData(0, 0, width, height);
-    } catch (e) {
-      return defaultRGB;
-    }
-
-    while ((i += blockSize * 4) < data.data.length) {
-      if (
-        data.data[i] > 200 ||
-        data.data[i + 1] > 200 ||
-        data.data[i + 2] > 200
-      )
-        continue;
-      ++count;
-      rgb.r += data.data[i];
-      rgb.g += data.data[i + 1];
-      rgb.b += data.data[i + 2];
-    }
-
-    rgb.r = ~~(rgb.r / count);
-    rgb.g = ~~(rgb.g / count);
-    rgb.b = ~~(rgb.b / count);
-
-    return rgb;
   }
 
   static _drawDot(
@@ -583,15 +525,6 @@ export class AwesomeQR {
         this.options.background.dimming ??
         AwesomeQR.defaultOptions.background?.dimming ??
         "";
-
-      // Actually I don't know if autoColor functionality is useful.
-      if (this.options.autoColor) {
-        const avgRGB = AwesomeQR._getAverageRGB(
-          this.createCanvas,
-          backgroundImage
-        );
-        this.options.color = `rgb(${avgRGB.r},${avgRGB.g},${avgRGB.b})`;
-      }
 
       this.canvasContext.drawImage(backgroundImage, 0, 0, totalSize, totalSize);
       this.canvasContext.rect(0, 0, totalSize, totalSize);

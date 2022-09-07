@@ -20,7 +20,6 @@ If you're looking for examples, check out the wrappers (Node and Browser).
 ```typescript
 type Options = {
   text: string;
-  autoColor?: boolean;
   background?: {
     color?: string;
     dimming?: string;
@@ -69,16 +68,6 @@ type EventTypes =
 **Required**
 
 Text to be encoded in the QR code.
-
-<hr />
-
-### autoColor
-
-**Type** `boolean`
-
-**defaultValue** `true`
-
-Automatically calculate the _colorLight_ value from the QR code's background.
 
 <hr />
 
