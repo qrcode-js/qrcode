@@ -1,8 +1,25 @@
 {
-  "name": "@qrcode-js/root",
-  "version": "0.2.0",
-  "private": true,
+  "author": "@qrcode-js team",
+  "bugs": {
+    "url": "https://github.com/qrcode-js/qrcode/issues"
+  },
   "description": "Monorepo for @qrcode-js",
+  "devDependencies": {
+    "lerna": "^5.4.3",
+    "ts-loader": "^9.0.0",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.8.0",
+    "prettier": "^2.7.1",
+    "prettier-plugin-sort-json": "^0.0.3"
+  },
+  "homepage": "https://github.com/qrcode-js/qrcode#readme",
+  "license": "MIT",
+  "name": "@qrcode-js/root",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qrcode-js/qrcode.git"
+  },
   "scripts": {
     "build": "lerna run build",
     "dev": "lerna run dev --parallel",
@@ -12,23 +29,6 @@
     "preversion": "npm run update-readme"
   },
   "type": "module",
-  "workspaces": [
-    "packages/*"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/qrcode-js/qrcode.git"
-  },
-  "author": "@qrcode-js team",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/qrcode-js/qrcode/issues"
-  },
-  "homepage": "https://github.com/qrcode-js/qrcode#readme",
-  "devDependencies": {
-    "lerna": "^5.4.3",
-    "ts-loader": "^9.0.0",
-    "ts-node": "^10.0.0",
-    "typescript": "^4.8.0"
-  }
+  "version": "0.2.0",
+  "workspaces": ["packages/*"]
 }
