@@ -1,3 +1,4 @@
 {
+  "(*.ts|*.js)": "npx eslint --fix",
   "(types.ts|*.md|update-readme.js)": ["npm run update-readme", "git add *.md"]
 }
