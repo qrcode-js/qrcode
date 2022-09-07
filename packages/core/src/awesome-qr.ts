@@ -314,21 +314,29 @@ export class AwesomeQR {
   }
 
   private async _draw(): Promise<Buffer | string> {
+    /**
+     * Count of the squares
+     */
     const nCount = this.qrCode.moduleCount!;
-    const rawSize = this.options.size!;
-    let rawMargin = this.options.margin!;
+    /**
+     * Original size
+     */
+    const size = this.options.size!;
+    /**
+     * Original margin
+     */
+    let margin = this.options.margin!;
 
-    if (rawMargin < 0 || rawMargin * 2 >= rawSize) {
-      rawMargin = 0;
+    if (margin < 0 || margin * 2 >= size) {
+      margin = 0;
     }
 
-    const rawViewportSize = rawSize - 2 * rawMargin;
-    const margin = Math.ceil(rawMargin);
+    const marginCeiled = Math.ceil(margin);
 
     /**
      * Size of a single dot
      */
-    const nSize = Math.ceil(rawViewportSize / nCount);
+    const nSize = Math.ceil((size - 2 * margin) / nCount);
     /**
      * Internal size (no margin)
      */
@@ -336,9 +344,9 @@ export class AwesomeQR {
     /**
      * Internal size + 2 * margin
      */
-    const size = viewportSize + 2 * margin;
+    const totalSize = viewportSize + 2 * marginCeiled;
 
-    const mainCanvas = this.createCanvas(size, size);
+    const mainCanvas = this.createCanvas(totalSize, totalSize);
     const mainCanvasContext: CanvasRenderingContext2D =
       mainCanvas.getContext("2d");
     mainCanvasContext.fillStyle = this.options.colorDark!;
@@ -347,7 +355,7 @@ export class AwesomeQR {
 
     // Translate to make the top and left margins off the viewport
     mainCanvasContext.save();
-    mainCanvasContext.translate(margin, margin);
+    mainCanvasContext.translate(marginCeiled, marginCeiled);
 
     if (this.options.onEvent) {
       this.options.onEvent("start-foreground", mainCanvasContext, {
@@ -476,10 +484,30 @@ export class AwesomeQR {
     // Fill the margin
     if (this.options.whiteMargin) {
       mainCanvasContext.fillStyle = "#FFFFFF";
-      mainCanvasContext.fillRect(-margin, -margin, size - margin, margin);
-      mainCanvasContext.fillRect(viewportSize, -margin, margin, size - margin);
-      mainCanvasContext.fillRect(0, viewportSize, size - margin, margin);
-      mainCanvasContext.fillRect(-margin, 0, margin, size - margin);
+      mainCanvasContext.fillRect(
+        -marginCeiled,
+        -marginCeiled,
+        totalSize - marginCeiled,
+        marginCeiled
+      );
+      mainCanvasContext.fillRect(
+        viewportSize,
+        -marginCeiled,
+        marginCeiled,
+        totalSize - marginCeiled
+      );
+      mainCanvasContext.fillRect(
+        0,
+        viewportSize,
+        totalSize - marginCeiled,
+        marginCeiled
+      );
+      mainCanvasContext.fillRect(
+        -marginCeiled,
+        0,
+        marginCeiled,
+        totalSize - marginCeiled
+      );
     }
 
     if (!!this.options.logo.image) {
@@ -518,7 +546,7 @@ export class AwesomeQR {
       });
     }
 
-    const backgroundCanvas = this.createCanvas(size, size);
+    const backgroundCanvas = this.createCanvas(totalSize, totalSize);
     const backgroundCanvasContext: CanvasRenderingContext2D =
       backgroundCanvas.getContext("2d");
 
@@ -544,12 +572,18 @@ export class AwesomeQR {
         this.options.colorDark = `rgb(${avgRGB.r},${avgRGB.g},${avgRGB.b})`;
       }
 
-      backgroundCanvasContext.drawImage(backgroundImage, 0, 0, size, size);
-      backgroundCanvasContext.rect(0, 0, size, size);
+      backgroundCanvasContext.drawImage(
+        backgroundImage,
+        0,
+        0,
+        totalSize,
+        totalSize
+      );
+      backgroundCanvasContext.rect(0, 0, totalSize, totalSize);
       backgroundCanvasContext.fillStyle = backgroundDimming;
       backgroundCanvasContext.fill();
     } else {
-      backgroundCanvasContext.rect(0, 0, size, size);
+      backgroundCanvasContext.rect(0, 0, totalSize, totalSize);
       backgroundCanvasContext.fillStyle = this.options.colorLight!;
       backgroundCanvasContext.fill();
     }
@@ -564,7 +598,7 @@ export class AwesomeQR {
     // Apply foreground to background canvas
     backgroundCanvasContext.drawImage(mainCanvas, 0, 0);
     // Scale the final image
-    this.canvasContext.drawImage(backgroundCanvas, 0, 0, rawSize, rawSize);
+    this.canvasContext.drawImage(backgroundCanvas, 0, 0, size, size);
 
     if (this.options.onEvent) {
       this.options.onEvent("final-canvas", this.canvasContext, {
