@@ -546,15 +546,8 @@ export class AwesomeQR {
       });
     }
 
-    const backgroundCanvas = this.createCanvas(totalSize, totalSize);
-    const backgroundCanvasContext: CanvasRenderingContext2D =
-      backgroundCanvas.getContext("2d");
-
     if (this.options.onEvent) {
-      this.options.onEvent("start-background", backgroundCanvasContext, {
-        nCount,
-        nSize,
-      });
+      this.options.onEvent("start-background", this.canvasContext, {});
     }
 
     if (!!this.options.background.image) {
@@ -572,33 +565,22 @@ export class AwesomeQR {
         this.options.colorDark = `rgb(${avgRGB.r},${avgRGB.g},${avgRGB.b})`;
       }
 
-      backgroundCanvasContext.drawImage(
-        backgroundImage,
-        0,
-        0,
-        totalSize,
-        totalSize
-      );
-      backgroundCanvasContext.rect(0, 0, totalSize, totalSize);
-      backgroundCanvasContext.fillStyle = backgroundDimming;
-      backgroundCanvasContext.fill();
+      this.canvasContext.drawImage(backgroundImage, 0, 0, totalSize, totalSize);
+      this.canvasContext.rect(0, 0, totalSize, totalSize);
+      this.canvasContext.fillStyle = backgroundDimming;
+      this.canvasContext.fill();
     } else {
-      backgroundCanvasContext.rect(0, 0, totalSize, totalSize);
-      backgroundCanvasContext.fillStyle = this.options.colorLight!;
-      backgroundCanvasContext.fill();
+      this.canvasContext.rect(0, 0, totalSize, totalSize);
+      this.canvasContext.fillStyle = this.options.colorLight!;
+      this.canvasContext.fill();
     }
 
     if (this.options.onEvent) {
-      this.options.onEvent("end-background", backgroundCanvasContext, {
-        nCount,
-        nSize,
-      });
+      this.options.onEvent("end-background", this.canvasContext, {});
     }
 
     // Apply foreground to background canvas
-    backgroundCanvasContext.drawImage(mainCanvas, 0, 0);
-    // Scale the final image
-    this.canvasContext.drawImage(backgroundCanvas, 0, 0, size, size);
+    this.canvasContext.drawImage(mainCanvas, 0, 0, size, size);
 
     if (this.options.onEvent) {
       this.options.onEvent("final-canvas", this.canvasContext, {
