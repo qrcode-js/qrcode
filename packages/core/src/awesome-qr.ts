@@ -1,9 +1,5 @@
 import { QRCodeModel, QRErrorCorrectLevel, QRUtil } from "./qrcode.js";
-import merge from "lodash/merge.js";
-import cloneDeep from "lodash/cloneDeep.js";
 import type { Options } from "./types.js";
-
-const defaultScale = 0.4;
 
 export class AwesomeQR {
   // Functions dependent on environment (Node.js or browser)
@@ -16,7 +12,7 @@ export class AwesomeQR {
   private canvas: any;
   private canvasContext: CanvasRenderingContext2D;
   private qrCode: QRCodeModel;
-  private options: Required<Options>;
+  private options: Options;
 
   static CorrectLevel = QRErrorCorrectLevel;
 
@@ -46,31 +42,36 @@ export class AwesomeQR {
     loadImage: any,
     options: Options
   ) {
-    const _options = cloneDeep(AwesomeQR.defaultOptions);
-
-    merge(_options, options);
-
+    // Save arguments
+    this.canvas = canvas;
     this.createCanvas = createCanvas;
     this.loadImage = loadImage;
+    this.options = options;
 
-    this.options = _options as Required<Options>;
-    this.canvas = canvas;
     this.canvas.width = this.options.size;
     this.canvas.height = this.options.size;
     this.canvasContext = this.canvas.getContext("2d");
-    this.qrCode = new QRCodeModel(-1, this.options.qr.correctLevel);
-    if (
-      this.options.qr.maskPattern !== undefined &&
-      Number.isInteger(this.options.qr.maskPattern)
-    ) {
-      this.qrCode.maskPattern = this.options.qr.maskPattern;
+
+    const correctLevel =
+      this.options.qr?.correctLevel ??
+      AwesomeQR.defaultOptions.qr?.correctLevel ??
+      0;
+    this.qrCode = new QRCodeModel(-1, correctLevel);
+
+    const maskPattern =
+      this.options.qr?.maskPattern ??
+      AwesomeQR.defaultOptions.qr?.maskPattern ??
+      0;
+    if (Number.isInteger(maskPattern)) {
+      this.qrCode.maskPattern = maskPattern;
     }
-    if (
-      this.options.qr.version !== undefined &&
-      Number.isInteger(this.options.qr.version)
-    ) {
-      this.qrCode.typeNumber = this.options.qr.version;
+
+    const version =
+      this.options.qr?.version ?? AwesomeQR.defaultOptions.qr?.version ?? 0;
+    if (Number.isInteger(version)) {
+      this.qrCode.typeNumber = version;
     }
+
     this.qrCode.addData(this.options.text);
     this.qrCode.make();
   }
@@ -120,7 +121,6 @@ export class AwesomeQR {
       g: 0,
       b: 0,
     };
-    let width, height;
     let i = -4;
     const rgb = {
       r: 0,
@@ -129,8 +129,8 @@ export class AwesomeQR {
     };
     let count = 0;
 
-    height = image.naturalHeight || image.height;
-    width = image.naturalWidth || image.width;
+    const height = image.naturalHeight || image.height;
+    const width = image.naturalWidth || image.width;
 
     const canvas = createCanvas(width, height);
     const context = canvas.getContext("2d");
@@ -253,8 +253,14 @@ export class AwesomeQR {
       bottom: boolean;
     }
   ) {
-    const scale = this.options.dots.scale || defaultScale;
-    const round = this.options.dots.round || 0;
+    let scale =
+      this.options.dots?.scale ?? AwesomeQR.defaultOptions.dots?.scale ?? 1;
+    scale = Math.min(Math.max(scale, 0), 1);
+
+    let round =
+      this.options.dots?.round ?? AwesomeQR.defaultOptions.dots?.round ?? 0;
+    round = Math.min(Math.max(round, 0), 1);
+
     const drawFunction = this.options.drawFunction;
     if (drawFunction === undefined) {
       return AwesomeQR._drawDot(canvasContext, left, top, nSize, scale, round);
@@ -288,14 +294,16 @@ export class AwesomeQR {
     size: number
   ) {
     // range [0-1]
-    const rounded = Math.min(Math.max(this.options.finder.round || 0, 0), 1);
+    let round =
+      this.options.finder?.round ?? AwesomeQR.defaultOptions.finder?.round ?? 0;
+    round = Math.min(Math.max(round, 0), 1);
     AwesomeQR._prepareRoundedCornerClip(
       canvasContext,
       left * size,
       top * size,
       7 * size,
       7 * size,
-      3.5 * rounded * size
+      3.5 * round * size
     );
     canvasContext.fill();
     AwesomeQR._prepareRoundedCornerClip(
@@ -304,7 +312,7 @@ export class AwesomeQR {
       (top + 1) * size,
       5 * size,
       5 * size,
-      2.5 * rounded * size
+      2.5 * round * size
     );
     AwesomeQR._removePortion(canvasContext);
     AwesomeQR._prepareRoundedCornerClip(
@@ -313,7 +321,7 @@ export class AwesomeQR {
       (top + 2) * size,
       3 * size,
       3 * size,
-      1.5 * rounded * size
+      1.5 * round * size
     );
     canvasContext.fill();
   }
@@ -322,15 +330,16 @@ export class AwesomeQR {
     /**
      * Count of the squares
      */
-    const nCount = this.qrCode.moduleCount!;
+    const nCount = this.qrCode.moduleCount;
     /**
      * Original size
      */
-    const size = this.options.size!;
+    const size = this.options.size ?? AwesomeQR.defaultOptions.size ?? 0;
     /**
      * Original margin
      */
-    let margin = this.options.margin.size!;
+    let margin =
+      this.options.margin?.size ?? AwesomeQR.defaultOptions.margin?.size ?? 0;
 
     if (margin < 0 || margin * 2 >= size) {
       margin = 0;
@@ -354,7 +363,8 @@ export class AwesomeQR {
     const mainCanvas = this.createCanvas(totalSize, totalSize);
     const mainCanvasContext: CanvasRenderingContext2D =
       mainCanvas.getContext("2d");
-    mainCanvasContext.fillStyle = this.options.color!;
+    mainCanvasContext.fillStyle =
+      this.options.color ?? AwesomeQR.defaultOptions.color ?? "";
 
     this._clear();
 
@@ -371,12 +381,16 @@ export class AwesomeQR {
 
     const alignmentPatternCenters = QRUtil.getPatternPosition(
       this.qrCode.typeNumber
-    )!;
+    );
 
     let logoSide: number = nCount / 2;
-    if (this.options.logo.image) {
-      const logoScale = Math.min(Math.max(this.options.logo.scale!, 0), 1);
-      let logoMargin = this.options.logo.margin!;
+    if (this.options.logo) {
+      let logoScale =
+        this.options.logo.scale ?? AwesomeQR.defaultOptions.logo?.scale ?? 0;
+      logoScale = Math.min(Math.max(logoScale, 0), 1);
+
+      let logoMargin =
+        this.options.logo.margin ?? AwesomeQR.defaultOptions.logo?.margin ?? 0;
       if (logoMargin < 0) {
         logoMargin = 0;
       }
@@ -414,10 +428,10 @@ export class AwesomeQR {
           for (let j = 0; j < alignmentPatternCenters.length; j++) {
             // Check if point is on the border of the alignment pattern
             if (
-              row >= alignmentPatternCenters[i]! - 2 &&
-              row <= alignmentPatternCenters[i]! + 2 &&
-              col >= alignmentPatternCenters[j]! - 2 &&
-              col <= alignmentPatternCenters[j]! + 2
+              row >= alignmentPatternCenters[i] - 2 &&
+              row <= alignmentPatternCenters[i] + 2 &&
+              col >= alignmentPatternCenters[j] - 2 &&
+              col <= alignmentPatternCenters[j] + 2
             ) {
               isAlignment = true;
               break;
@@ -487,7 +501,10 @@ export class AwesomeQR {
     }
 
     // Fill the margin
-    mainCanvasContext.fillStyle = this.options.margin.color!;
+    mainCanvasContext.fillStyle =
+      this.options.margin?.color ??
+      AwesomeQR.defaultOptions.margin?.color ??
+      "";
     mainCanvasContext.fillRect(
       -marginCeiled,
       -marginCeiled,
@@ -513,18 +530,22 @@ export class AwesomeQR {
       totalSize - marginCeiled
     );
 
-    if (this.options.logo.image) {
-      const logoImage = await this.loadImage(this.options.logo.image!);
+    if (this.options.logo) {
+      const logoImage = await this.loadImage(this.options.logo.image);
 
-      const logoScale = Math.min(Math.max(this.options.logo.scale!, 0), 1);
-      let logoMargin = this.options.logo.margin!;
-      const logoCornerRadius = Math.min(
-        Math.max(this.options.logo.round!, 0),
-        1
-      );
+      let logoScale =
+        this.options.logo.scale ?? AwesomeQR.defaultOptions.logo?.scale ?? 1;
+      logoScale = Math.min(Math.max(logoScale, 0), 1);
+
+      let logoMargin =
+        this.options.logo.margin ?? AwesomeQR.defaultOptions.logo?.margin ?? 0;
       if (logoMargin < 0) {
         logoMargin = 0;
       }
+
+      let logoCornerRound =
+        this.options.logo.round ?? AwesomeQR.defaultOptions.logo?.round ?? 0;
+      logoCornerRound = Math.min(Math.max(logoCornerRound, 0), 1);
 
       const logoSize = viewportSize * logoScale;
       const logoX = 0.5 * (viewportSize - logoSize);
@@ -536,7 +557,7 @@ export class AwesomeQR {
         logoX,
         logoSize,
         logoSize,
-        logoCornerRadius * logoSize * 0.5
+        logoCornerRound * logoSize * 0.5
       );
       mainCanvasContext.clip();
       mainCanvasContext.drawImage(logoImage, logoX, logoX, logoSize, logoSize);
@@ -553,12 +574,15 @@ export class AwesomeQR {
       this.options.onEvent("start-background", this.canvasContext, {});
     }
 
-    if (this.options.background.image) {
+    if (this.options.background) {
       const backgroundImage = await this.loadImage(
         this.options.background.image
       );
 
-      const backgroundDimming = this.options.background.dimming!;
+      const backgroundDimming =
+        this.options.background.dimming ??
+        AwesomeQR.defaultOptions.background?.dimming ??
+        "";
 
       // Actually I don't know if autoColor functionality is useful.
       if (this.options.autoColor) {
@@ -575,7 +599,8 @@ export class AwesomeQR {
       this.canvasContext.fill();
     } else {
       this.canvasContext.rect(0, 0, totalSize, totalSize);
-      this.canvasContext.fillStyle = this.options.background.color!;
+      const color = this.options.color ?? AwesomeQR.defaultOptions.color ?? "";
+      this.canvasContext.fillStyle = color;
       this.canvasContext.fill();
     }
 
