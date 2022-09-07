@@ -23,8 +23,8 @@
     "url": "git+https://github.com/qrcode-js/core.git"
   },
   "scripts": {
-    "dev": "tsc -w --preserveWatchOutput",
     "build": "tsc",
+    "dev": "tsc -w --preserveWatchOutput",
     "prepublishOnly": "npm run build"
   },
   "type": "module",

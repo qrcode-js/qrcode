@@ -24,10 +24,10 @@
     "url": "git+https://github.com/qrcode-js/node.git"
   },
   "scripts": {
-    "dev": "tsc -w --preserveWatchOutput",
     "build": "tsc",
-    "test": "ts-node test.ts",
-    "prepublishOnly": "npm run build"
+    "dev": "tsc -w --preserveWatchOutput",
+    "prepublishOnly": "npm run build",
+    "test": "ts-node test.ts"
   },
   "type": "module",
   "types": "lib/index.d.ts",

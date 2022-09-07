@@ -6,11 +6,11 @@
   "description": "Monorepo for @qrcode-js",
   "devDependencies": {
     "lerna": "^5.4.3",
+    "prettier": "^2.7.1",
+    "prettier-plugin-sort-json": "^0.0.3",
     "ts-loader": "^9.0.0",
     "ts-node": "^10.0.0",
-    "typescript": "^4.8.0",
-    "prettier": "^2.7.1",
-    "prettier-plugin-sort-json": "^0.0.3"
+    "typescript": "^4.8.0"
   },
   "homepage": "https://github.com/qrcode-js/qrcode#readme",
   "license": "MIT",
@@ -23,10 +23,10 @@
   "scripts": {
     "build": "lerna run build",
     "dev": "lerna run dev --parallel",
-    "test": "lerna run test --parallel",
     "install": "lerna bootstrap",
-    "update-readme": "node scripts/update-readme.js",
-    "preversion": "npm run update-readme"
+    "preversion": "npm run update-readme",
+    "test": "lerna run test --parallel",
+    "update-readme": "node scripts/update-readme.js"
   },
   "type": "module",
   "version": "0.2.0",
