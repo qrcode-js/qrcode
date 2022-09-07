@@ -7,8 +7,8 @@ const defaultScale = 0.4;
 
 export class AwesomeQR {
   // Functions dependent on environment (Node.js or browser)
-  private createCanvas: Function;
-  private loadImage: Function;
+  private createCanvas: (width: number, height: number) => any;
+  private loadImage: any;
 
   // Output canvas and context
   // In browser is passed with invocation
@@ -41,11 +41,9 @@ export class AwesomeQR {
   };
 
   constructor(
-    canvas: never,
-    createCanvas:
-      | ((width: number, height: number) => HTMLCanvasElement)
-      | Function,
-    loadImage: Function,
+    canvas: any,
+    createCanvas: (width: number, height: number) => any,
+    loadImage: any,
     options: Options
   ) {
     const _options = cloneDeep(AwesomeQR.defaultOptions);
@@ -112,7 +110,10 @@ export class AwesomeQR {
     canvasContext.closePath();
   }
 
-  private static _getAverageRGB(createCanvas: Function, image: any) {
+  private static _getAverageRGB(
+    createCanvas: (width: number, height: number) => any,
+    image: any
+  ) {
     const blockSize = 5;
     const defaultRGB = {
       r: 0,
