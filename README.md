@@ -80,7 +80,6 @@ type Options = {
     version?: number;
   };
   size?: number;
-  whiteMargin?: boolean;
 };
 type EventTypes =
   | "start-foreground"
@@ -409,16 +408,6 @@ For more information, please refer to [https://www.qrcode.com/en/about/version.h
 **defaultValue** `400`
 
 Size of the QR code in pixel.
-
-<hr />
-
-### whiteMargin
-
-**Type** `boolean`
-
-**defaultValue** `false`
-
-Use a white margin instead of a transparent one which reveals the background of the QR code on margins.
 
 <hr />
 

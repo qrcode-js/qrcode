@@ -123,13 +123,6 @@ export type Options = {
   autoColor?: boolean;
 
   /**
-   * Use a white margin instead of a transparent one which reveals the background of the QR code on margins.
-   *
-   * @defaultValue false
-   */
-  whiteMargin?: boolean;
-
-  /**
    * Function for creating a gradient as foreground color
    *
    * Must return a CanvasGradient
