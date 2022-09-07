@@ -218,7 +218,9 @@ Percentage to round the three finder in the QR
 **Type** `(ctx: CanvasRenderingContext2D, size: number) => CanvasGradient`
 
 Function for creating a gradient as foreground color
+
 Must return a CanvasGradient
+
 Overrides colorDark option
 
 <hr />

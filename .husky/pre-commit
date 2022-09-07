@@ -2,5 +2,13 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 # Some tasks can be parallelized, but not all...
-npx lint-staged -v -c ./lint-staged/.lintstaged-1.json || npx.cmd lint-staged -v -c ./lint-staged/.lintstaged-1.json
-npx lint-staged -c ./lint-staged/.lintstaged-2.json || npx.cmd lint-staged -c ./lint-staged/.lintstaged-2.json
+case `uname` in
+  *CYGWIN*|*MINGW*|*MSYS*)
+    npx.cmd lint-staged -v -c ./lint-staged/.lintstaged-1.json
+    npx.cmd lint-staged -v -c ./lint-staged/.lintstaged-2.json
+  ;;
+  *)
+    npx lint-staged -v -c ./lint-staged/.lintstaged-1.json
+    npx lint-staged -v -c ./lint-staged/.lintstaged-2.json
+  ;;
+esac
