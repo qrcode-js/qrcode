@@ -1,4 +1,3 @@
 {
-  "(types.ts|*.md|update-readme.js)": ["npm run update-readme", "git add *.md"],
-  "*.ts": "lerna run test-precommit --parallel --"
+  "(types.ts|*.md|update-readme.js)": ["npm run update-readme", "git add *.md"]
 }
