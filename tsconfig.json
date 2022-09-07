@@ -20,12 +20,12 @@
     "noUnusedParameters": true,
     "importsNotUsedAsValues": "error"
   },
+  "exclude": ["node_modules", "lib", "dist"],
   "ts-node": {
     "esm": true,
     "transpileOnly": true
   },
   "typeAcquisition": {
     "enable": true
-  },
-  "exclude": ["node_modules", "lib", "dist"]
+  }
 }

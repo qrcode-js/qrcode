@@ -1,10 +1,26 @@
 {
-  "name": "@qrcode-js/browser",
-  "version": "0.2.2",
+  "author": "qrcode-js team",
+  "bugs": {
+    "url": "https://github.com/qrcode-js/browser/issues"
+  },
+  "dependencies": {
+    "@qrcode-js/core": "^0.2.2"
+  },
   "description": "> ⚛️ &nbsp; If you're using React, please use [react-awesome-qr](https://github.com/AwesomeQR/react-awesome-qr).",
+  "devDependencies": {
+    "concurrently": "^7.3.0",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
+  },
+  "files": ["lib", "dist/index.js"],
+  "homepage": "https://github.com/qrcode-js/browser#readme",
+  "license": "MIT",
   "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "type": "module",
+  "name": "@qrcode-js/browser",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qrcode-js/browser.git"
+  },
   "scripts": {
     "dev": "concurrently --kill-others -n lib,dist \"npm run dev-lib\" \"npm run dev-dist\"",
     "dev-lib": "tsc -w --preserveWatchOutput",
@@ -14,27 +30,8 @@
     "build-lib": "tsc",
     "prepublishOnly": "npm run build"
   },
+  "type": "module",
+  "types": "lib/index.d.ts",
   "unpkg": "./dist/index.js",
-  "files": [
-    "lib",
-    "dist/index.js"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/qrcode-js/browser.git"
-  },
-  "author": "qrcode-js team",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/qrcode-js/browser/issues"
-  },
-  "homepage": "https://github.com/qrcode-js/browser#readme",
-  "dependencies": {
-    "@qrcode-js/core": "^0.2.2"
-  },
-  "devDependencies": {
-    "concurrently": "^7.3.0",
-    "webpack": "^5.74.0",
-    "webpack-cli": "^4.10.0"
-  }
+  "version": "0.2.2"
 }

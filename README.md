@@ -201,25 +201,7 @@ Scale factor for all dots.
 
 ### drawFunction
 
-**Type** `"telegram"
-    | ((
-        canvasContext: CanvasRenderingContext2D,
-        left: number,
-        top: number,
-        nSize: number,
-        scale: number,
-        round: number,
-        parameters: {
-          isTiming: boolean;
-          isAlignment: boolean;
-        },
-        otherCells: {
-          top: boolean;
-          left: boolean;
-          right: boolean;
-          bottom: boolean;
-        }
-      ) => undefined)`
+**Type** `"telegram" | (( canvasContext: CanvasRenderingContext2D, left: number, top: number, nSize: number, scale: number, round: number, parameters: { isTiming: boolean; isAlignment: boolean; }, otherCells: { top: boolean; left: boolean; right: boolean; bottom: boolean; } ) => undefined)`
 
 Custom function to draw a custom shape as a dot in the QR.
 
@@ -332,11 +314,7 @@ Size of margins around the QR code body in pixel.
 
 ### onEvent
 
-**Type** `(
-    type: EventTypes,
-    canvasContext: CanvasRenderingContext2D,
-    parameters: object
-  ) => undefined`
+**Type** `( type: EventTypes, canvasContext: CanvasRenderingContext2D, parameters: object ) => undefined`
 
 Custom function called at certain phases of drawing the QR.
 Useful for customizing the canvas if something is not supported by this library
@@ -587,4 +565,3 @@ export default function MyCanvas() {
   return <canvas ref={canvasRef}></canvas>;
 }
 ```
-
