@@ -543,10 +543,7 @@ export class AwesomeQR {
     this.canvasContext.drawImage(mainCanvas, 0, 0, size, size);
 
     if (this.options.onEvent) {
-      this.options.onEvent("final-canvas", this.canvasContext, {
-        nCount,
-        nSize,
-      });
+      this.options.onEvent("final-canvas", this.canvasContext, {});
     }
 
     if (isElement(this.canvas)) {
