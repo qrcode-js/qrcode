@@ -19,7 +19,7 @@ export class AwesomeQR {
   static defaultOptions: Options = {
     text: "",
     size: 400,
-    margin: { size: 20, color: "transparent" },
+    margin: { size: 20 },
     color: "#000000",
     qr: {
       correctLevel: QRErrorCorrectLevel.M,
@@ -441,34 +441,33 @@ export class AwesomeQR {
     }
 
     // Fill the margin
-    mainCanvasContext.fillStyle =
-      this.options.margin?.color ??
-      AwesomeQR.defaultOptions.margin?.color ??
-      "";
-    mainCanvasContext.fillRect(
-      -marginCeiled,
-      -marginCeiled,
-      totalSize - marginCeiled,
-      marginCeiled
-    );
-    mainCanvasContext.fillRect(
-      viewportSize,
-      -marginCeiled,
-      marginCeiled,
-      totalSize - marginCeiled
-    );
-    mainCanvasContext.fillRect(
-      0,
-      viewportSize,
-      totalSize - marginCeiled,
-      marginCeiled
-    );
-    mainCanvasContext.fillRect(
-      -marginCeiled,
-      0,
-      marginCeiled,
-      totalSize - marginCeiled
-    );
+    if (this.options.margin?.color) {
+      mainCanvasContext.fillStyle = this.options.margin.color;
+      mainCanvasContext.fillRect(
+        -marginCeiled,
+        -marginCeiled,
+        totalSize - marginCeiled,
+        marginCeiled
+      );
+      mainCanvasContext.fillRect(
+        viewportSize,
+        -marginCeiled,
+        marginCeiled,
+        totalSize - marginCeiled
+      );
+      mainCanvasContext.fillRect(
+        0,
+        viewportSize,
+        totalSize - marginCeiled,
+        marginCeiled
+      );
+      mainCanvasContext.fillRect(
+        -marginCeiled,
+        0,
+        marginCeiled,
+        totalSize - marginCeiled
+      );
+    }
 
     if (this.options.logo?.image) {
       const logoImage = await this.loadImage(this.options.logo.image);
