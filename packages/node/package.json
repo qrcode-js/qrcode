@@ -12,19 +12,19 @@
     "canvas": "^2.9.3",
     "lodash": "^4.17.21"
   },
-  "description": "NodeJs wrapper for server rendering",
+  "description": "NodeJs version of the Awesome QR",
   "devDependencies": {
     "@types/lodash": "^4.14.184"
   },
   "files": ["lib", "!**/test.*"],
-  "homepage": "https://github.com/qrcode-js/node#readme",
+  "homepage": "https://github.com/qrcode-js/qrcode#readme",
   "keywords": ["qr", "qrcode", "node"],
   "license": "MIT",
   "main": "lib/index.js",
   "name": "@qrcode-js/node",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/qrcode-js/node.git"
+    "url": "git+https://github.com/qrcode-js/qrcode.git"
   },
   "scripts": {
     "build": "tsc",

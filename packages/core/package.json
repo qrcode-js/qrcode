@@ -1,21 +1,21 @@
 {
   "author": "qrcode-js team",
   "bugs": {
-    "url": "https://github.com/qrcode-js/core/issues"
+    "url": "https://github.com/qrcode-js/qrcode/issues"
   },
   "description": "An awesome but simple QR code generator written in JavaScript.",
   "devDependencies": {
     "@types/node": "^16.0.14"
   },
   "files": ["lib"],
-  "homepage": "https://github.com/qrcode-js/core#readme",
+  "homepage": "https://github.com/qrcode-js/qrcode#readme",
   "keywords": ["qr", "qrcode", "barcode"],
   "license": "MIT",
   "main": "lib/index.js",
   "name": "@qrcode-js/core",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/qrcode-js/core.git"
+    "url": "git+https://github.com/qrcode-js/qrcode.git"
   },
   "scripts": {
     "build": "tsc",

@@ -1,25 +1,25 @@
 {
   "author": "qrcode-js team",
   "bugs": {
-    "url": "https://github.com/qrcode-js/browser/issues"
+    "url": "https://github.com/qrcode-js/qrcode/issues"
   },
   "dependencies": {
     "@qrcode-js/core": "^0.3.0"
   },
-  "description": "> ⚛️ &nbsp; If you're using React, please use [react-awesome-qr](https://github.com/AwesomeQR/react-awesome-qr).",
+  "description": "Browser version of the Awesome QR",
   "devDependencies": {
     "concurrently": "^7.3.0",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0"
   },
   "files": ["lib", "dist/index.js"],
-  "homepage": "https://github.com/qrcode-js/browser#readme",
+  "homepage": "https://github.com/qrcode-js/qrcode#readme",
   "license": "MIT",
   "main": "lib/index.js",
   "name": "@qrcode-js/browser",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/qrcode-js/browser.git"
+    "url": "git+https://github.com/qrcode-js/qrcode.git"
   },
   "scripts": {
     "build": "npm run build-lib && npm run build-dist",
