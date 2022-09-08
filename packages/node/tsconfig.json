@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "lib": ["ES2022"],
     "outDir": "./lib"
   },
   "extends": "../../tsconfig.json",
