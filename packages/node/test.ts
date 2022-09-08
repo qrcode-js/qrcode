@@ -1,5 +1,5 @@
 import QRCodeNode from "./lib/index.js";
-import { promises as fs } from "fs";
+import fs from "node:fs/promises";
 
 async function init() {
   const myQR = QRCodeNode({
