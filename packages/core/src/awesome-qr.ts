@@ -74,7 +74,7 @@ export class AwesomeQR {
     this.qrCode.make();
   }
 
-  draw(): Promise<Buffer | string> {
+  draw(): Promise<Buffer | undefined> {
     return new Promise((resolve) => this._draw().then(resolve));
   }
 
@@ -267,7 +267,7 @@ export class AwesomeQR {
     canvasContext.fill();
   }
 
-  private async _draw(): Promise<Buffer | string> {
+  private async _draw(): Promise<Buffer | undefined> {
     /**
      * Count of the squares
      */
@@ -550,7 +550,7 @@ export class AwesomeQR {
     }
 
     if (isElement(this.canvas)) {
-      return Promise.resolve(this.canvas.toDataURL());
+      return;
     }
 
     return Promise.resolve(this.canvas.toBuffer());

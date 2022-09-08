@@ -55,6 +55,14 @@ async function main(): Promise<void> {
   }
 
   const myQR = QRCodeNode(options as Options);
-  await myQR.draw().then((d) => fs.writeFile(output, d));
+  await myQR.draw().then((d) => {
+    if (!d) {
+      console.error(
+        "Error. Received undefined despite being on Node. Please report this!"
+      );
+      return;
+    }
+    fs.writeFile(output, d);
+  });
 }
 main().catch(console.error);

@@ -38,6 +38,14 @@ async function init() {
   });
 
   await fs.mkdir("dist", { recursive: true });
-  await myQR.draw().then((d) => fs.writeFile("dist/qrcode.png", d));
+  await myQR.draw().then((d) => {
+    if (!d) {
+      console.error(
+        "Error. Received undefined despite being on Node. Please report this!"
+      );
+      return;
+    }
+    fs.writeFile("dist/qrcode.png", d);
+  });
 }
 init();
