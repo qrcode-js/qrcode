@@ -122,7 +122,7 @@ export type Options = {
    *
    * Overrides colorDark option
    */
-  gradient?: (ctx: CanvasRenderingContext2D, size: number) => CanvasGradient;
+  gradient?: (ctx: any, size: number) => any;
 
   /**
    * Background options
@@ -212,7 +212,7 @@ export type Options = {
   drawFunction?:
     | "telegram"
     | ((
-        canvasContext: CanvasRenderingContext2D,
+        canvasContext: any,
         left: number,
         top: number,
         nSize: number,
@@ -240,11 +240,7 @@ export type Options = {
    * - starting painting background
    * - end painting background
    */
-  onEvent?: (
-    type: EventTypes,
-    canvasContext: CanvasRenderingContext2D,
-    parameters: object
-  ) => void;
+  onEvent?: (type: EventTypes, canvasContext: any, parameters?: object) => void;
 };
 
 type EventTypes =

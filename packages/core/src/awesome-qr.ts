@@ -10,7 +10,7 @@ export class AwesomeQR {
   // In browser is passed with invocation
   // In Node it is created at runtime
   private canvas: any;
-  private canvasContext: CanvasRenderingContext2D;
+  private canvasContext: any;
   private qrCode: QRCodeModel;
   private options: Options;
 
@@ -82,7 +82,7 @@ export class AwesomeQR {
     this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
-  static _removePortion(canvasContext: CanvasRenderingContext2D) {
+  static _removePortion(canvasContext: any) {
     const oldGlobalCompositeOperation = canvasContext.globalCompositeOperation;
     const oldFillStyle = canvasContext.fillStyle;
     canvasContext.globalCompositeOperation = "destination-out";
@@ -93,7 +93,7 @@ export class AwesomeQR {
   }
 
   static _prepareRoundedCornerClip(
-    canvasContext: CanvasRenderingContext2D,
+    canvasContext: any,
     x: number,
     y: number,
     w: number,
@@ -110,7 +110,7 @@ export class AwesomeQR {
   }
 
   static _drawDot(
-    canvasContext: CanvasRenderingContext2D,
+    canvasContext: any,
     left: number,
     top: number,
     nSize: number,
@@ -129,7 +129,7 @@ export class AwesomeQR {
   }
 
   static _drawTelegramDot(
-    canvasContext: CanvasRenderingContext2D,
+    canvasContext: any,
     left: number,
     top: number,
     nSize: number,
@@ -179,7 +179,7 @@ export class AwesomeQR {
   }
 
   private _drawPoint(
-    canvasContext: CanvasRenderingContext2D,
+    canvasContext: any,
     left: number,
     top: number,
     nSize: number,
@@ -229,7 +229,7 @@ export class AwesomeQR {
   }
 
   private _drawFinder(
-    canvasContext: CanvasRenderingContext2D,
+    canvasContext: any,
     left: number,
     top: number,
     size: number
@@ -302,8 +302,7 @@ export class AwesomeQR {
     const totalSize = viewportSize + 2 * marginCeiled;
 
     const mainCanvas = this.createCanvas(totalSize, totalSize);
-    const mainCanvasContext: CanvasRenderingContext2D =
-      mainCanvas.getContext("2d");
+    const mainCanvasContext: any = mainCanvas.getContext("2d");
     mainCanvasContext.fillStyle =
       this.options.color ?? AwesomeQR.defaultOptions.color ?? "";
 
@@ -511,7 +510,7 @@ export class AwesomeQR {
 
     if (this.options.background) {
       if (this.options.onEvent) {
-        this.options.onEvent("start-background", this.canvasContext, {});
+        this.options.onEvent("start-background", this.canvasContext);
       }
       if (this.options.background.colorBelow) {
         this.canvasContext.fillStyle = this.options.background.colorBelow;
@@ -535,7 +534,7 @@ export class AwesomeQR {
         this.canvasContext.fillRect(0, 0, size, size);
       }
       if (this.options.onEvent) {
-        this.options.onEvent("end-background", this.canvasContext, {});
+        this.options.onEvent("end-background", this.canvasContext);
       }
     }
 
@@ -543,30 +542,13 @@ export class AwesomeQR {
     this.canvasContext.drawImage(mainCanvas, 0, 0, size, size);
 
     if (this.options.onEvent) {
-      this.options.onEvent("final-canvas", this.canvasContext, {});
+      this.options.onEvent("final-canvas", this.canvasContext);
     }
 
-    if (isElement(this.canvas)) {
-      return;
+    if (this.canvas.toBuffer) {
+      return Promise.resolve(this.canvas.toBuffer());
     }
 
-    return Promise.resolve(this.canvas.toBuffer());
-  }
-}
-
-function isElement(obj: any): boolean {
-  try {
-    //Using W3 DOM2 (works for FF, Opera and Chrome)
-    return obj instanceof HTMLElement;
-  } catch (e) {
-    //Browsers not supporting W3 DOM2 don't have HTMLElement and
-    //an exception is thrown and we end up here. Testing some
-    //properties that all elements have (works on IE7)
-    return (
-      typeof obj === "object" &&
-      obj.nodeType === 1 &&
-      typeof obj.style === "object" &&
-      typeof obj.ownerDocument === "object"
-    );
+    return;
   }
 }
