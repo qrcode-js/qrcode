@@ -47,6 +47,8 @@ async function main(): Promise<void> {
   const opts = args["--opt"] as string[];
   for (const opt of opts) {
     const equalPosition = opt.indexOf("=");
+    // Check if '=' is present and not in first place
+    if (equalPosition <= 0) continue;
     const key = opt.slice(0, equalPosition);
     const value = opt.slice(equalPosition + 1);
     set<Options>(options, key, parseFloat(value) ? parseFloat(value) : value);
