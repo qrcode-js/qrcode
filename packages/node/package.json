@@ -13,6 +13,9 @@
     "lodash": "^4.17.21"
   },
   "description": "NodeJs wrapper for server rendering",
+  "devDependencies": {
+    "@types/lodash": "^4.14.184"
+  },
   "files": ["lib", "!**/test.*"],
   "homepage": "https://github.com/qrcode-js/node#readme",
   "keywords": ["qr", "qrcode", "node"],

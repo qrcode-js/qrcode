@@ -3,13 +3,8 @@
   "bugs": {
     "url": "https://github.com/qrcode-js/core/issues"
   },
-  "dependencies": {
-    "buffer": "^6.0.3",
-    "lodash": "^4.17.21"
-  },
   "description": "An awesome but simple QR code generator written in JavaScript.",
   "devDependencies": {
-    "@types/lodash": "^4.14.184",
     "@types/node": "^16.0.14"
   },
   "files": ["lib"],
