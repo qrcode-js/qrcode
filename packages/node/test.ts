@@ -6,7 +6,6 @@ async function init() {
     text: "https://github.com/qrcode-js/qrcode",
     color: "#005c66",
     size: 1000,
-    logo: { round: 0.4, margin: 0 },
     dots: {
       scale: 0.75,
       round: 1,

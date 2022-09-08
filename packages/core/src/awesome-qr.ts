@@ -25,7 +25,7 @@ export class AwesomeQR {
       correctLevel: QRErrorCorrectLevel.M,
     },
     background: { dimming: "rgba(0,0,0,0)", color: "rgba(0,0,0,0)" },
-    logo: { scale: 0.2, margin: 10, round: 0.4 },
+    logo: { scale: 0.2, margin: 10, round: 0.4, image: "" },
     dots: {
       scale: 1,
       round: 0,
@@ -326,7 +326,7 @@ export class AwesomeQR {
     );
 
     let logoSide: number = nCount / 2;
-    if (this.options.logo) {
+    if (this.options.logo?.image) {
       let logoScale =
         this.options.logo.scale ?? AwesomeQR.defaultOptions.logo?.scale ?? 0;
       logoScale = Math.min(Math.max(logoScale, 0), 1);
@@ -428,8 +428,7 @@ export class AwesomeQR {
       }
     }
 
-    // - FINDER
-
+    // - FINDERS
     this._drawFinder(mainCanvasContext, 0, 0, nSize);
     this._drawFinder(mainCanvasContext, nCount - 7, 0, nSize);
     this._drawFinder(mainCanvasContext, 0, nCount - 7, nSize);
@@ -472,7 +471,7 @@ export class AwesomeQR {
       totalSize - marginCeiled
     );
 
-    if (this.options.logo) {
+    if (this.options.logo?.image) {
       const logoImage = await this.loadImage(this.options.logo.image);
 
       let logoScale =
@@ -541,7 +540,7 @@ export class AwesomeQR {
       this.options.onEvent("end-background", this.canvasContext, {});
     }
 
-    // Apply foreground to background canvas
+    // Apply foreground to final canvas
     this.canvasContext.drawImage(mainCanvas, 0, 0, size, size);
 
     if (this.options.onEvent) {

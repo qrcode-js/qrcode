@@ -63,7 +63,7 @@ type Options = {
   };
   gradient?: Function;
   logo?: {
-    image?: Union;
+    image: Union;
     margin?: number;
     round?: number;
     scale?: number;
@@ -251,6 +251,8 @@ Logo options
 
 **Type** `string | Buffer`
 
+**Required**
+
 Logo image to be displayed at the center of the QR code.
 
 Accepts a `data:` string in web browsers or a Buffer in Node.js.
@@ -325,7 +327,7 @@ Size of margins around the QR code body in pixel.
 
 ### onEvent
 
-**Type** `( type: EventTypes, canvasContext: CanvasRenderingContext2D, parameters: object ) => undefined`
+**Type** `( type: EventTypes, canvasContext: CanvasRenderingContext2D, parameters: object ) => void`
 
 Custom function called at certain phases of drawing the QR.
 Useful for customizing the canvas if something is not supported by this library

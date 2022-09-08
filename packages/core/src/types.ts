@@ -165,7 +165,7 @@ export type Options = {
      *
      * When set to `undefined` or `null`, the logo is disabled.
      */
-    image?: string | Buffer;
+    image: string | Buffer;
 
     /**
      * Ratio of the logo size to the QR code size.
@@ -242,7 +242,7 @@ export type Options = {
     type: EventTypes,
     canvasContext: CanvasRenderingContext2D,
     parameters: object
-  ) => undefined;
+  ) => void;
 };
 
 type EventTypes =
