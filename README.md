@@ -48,8 +48,8 @@ If you're looking for examples, check out the wrappers (Node and Browser).
 type Options = {
   text: string;
   background?: {
-    color?: string;
-    dimming?: string;
+    colorAbove?: string;
+    colorBelow?: string;
     image?: Union;
   };
   color?: string;
@@ -106,17 +106,7 @@ Background options
 
 <hr />
 
-### background.color
-
-**Type** `string`
-
-Color of the background of the QR.
-
-Goes behind an eventually image with `background.image` option
-
-<hr />
-
-### background.dimming
+### background.colorAbove
 
 **Type** `string`
 
@@ -127,6 +117,18 @@ Color of the dimming mask above the background image.
 Accepts a CSS &lt;color&gt;.
 
 For more information about CSS &lt;color&gt;, please refer to [https://developer.mozilla.org/en-US/docs/Web/CSS/color_value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
+
+<hr />
+
+### background.colorBelow
+
+**Type** `string`
+
+**defaultValue** `"transparent"`
+
+Color of the background of the QR.
+
+Goes behind an eventually image with `background.image` option
 
 <hr />
 

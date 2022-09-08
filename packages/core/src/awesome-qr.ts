@@ -24,7 +24,6 @@ export class AwesomeQR {
     qr: {
       correctLevel: QRErrorCorrectLevel.M,
     },
-    background: { dimming: "rgba(0,0,0,0)", color: "rgba(0,0,0,0)" },
     logo: { scale: 0.2, margin: 10, round: 0.4, image: "" },
     dots: {
       scale: 1,
@@ -511,33 +510,34 @@ export class AwesomeQR {
       });
     }
 
-    if (this.options.onEvent) {
-      this.options.onEvent("start-background", this.canvasContext, {});
-    }
-
     if (this.options.background) {
-      const backgroundImage = await this.loadImage(
-        this.options.background.image
-      );
+      if (this.options.onEvent) {
+        this.options.onEvent("start-background", this.canvasContext, {});
+      }
+      if (this.options.background.colorBelow) {
+        this.canvasContext.fillStyle = this.options.background.colorBelow;
+        this.canvasContext.fillRect(0, 0, size, size);
+      }
+      if (this.options.background.image) {
+        const backgroundImage = await this.loadImage(
+          this.options.background.image
+        );
 
-      const backgroundDimming =
-        this.options.background.dimming ??
-        AwesomeQR.defaultOptions.background?.dimming ??
-        "";
-
-      this.canvasContext.drawImage(backgroundImage, 0, 0, totalSize, totalSize);
-      this.canvasContext.rect(0, 0, totalSize, totalSize);
-      this.canvasContext.fillStyle = backgroundDimming;
-      this.canvasContext.fill();
-    } else {
-      this.canvasContext.rect(0, 0, totalSize, totalSize);
-      const color = this.options.color ?? AwesomeQR.defaultOptions.color ?? "";
-      this.canvasContext.fillStyle = color;
-      this.canvasContext.fill();
-    }
-
-    if (this.options.onEvent) {
-      this.options.onEvent("end-background", this.canvasContext, {});
+        this.canvasContext.drawImage(
+          backgroundImage,
+          0,
+          0,
+          totalSize,
+          totalSize
+        );
+      }
+      if (this.options.background.colorAbove) {
+        this.canvasContext.fillStyle = this.options.background.colorAbove;
+        this.canvasContext.fillRect(0, 0, size, size);
+      }
+      if (this.options.onEvent) {
+        this.options.onEvent("end-background", this.canvasContext, {});
+      }
     }
 
     // Apply foreground to final canvas

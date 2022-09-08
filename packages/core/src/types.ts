@@ -144,14 +144,16 @@ export type Options = {
      *
      * @defaultValue "rgba(0, 0, 0, 0)"
      */
-    dimming?: string;
+    colorAbove?: string;
 
     /**
      * Color of the background of the QR.
      *
      * Goes behind an eventually image with `background.image` option
+     *
+     * @defaultValue "transparent"
      */
-    color?: string;
+    colorBelow?: string;
   };
 
   /**
