@@ -10,12 +10,12 @@ This is the wrapper around the core package to provide support in browsers.
 <html>
   <body>
     <canvas id="canvas"></canvas>
-    <script src="https://unpkg.com/@qrcode-js/browser/dist/index.js"></script>
+    <script src="https://unpkg.com/@qrcode-js/browser"></script>
     <script>
       const canvas = document.getElementById("canvas");
       const myQR = QRCode.QRCodeBrowser(canvas, {
         text: "https://github.com/qrcode-js/qrcode",
-        colorDark: "#123456",
+        color: "#123456",
         size: 450,
         dots: {
           scale: 0.75,
