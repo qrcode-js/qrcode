@@ -36,6 +36,6 @@
     "update-readme": "node scripts/update-readme.js"
   },
   "type": "module",
-  "version": "0.2.0",
+  "version": "0.0.0",
   "workspaces": ["packages/*"]
 }
