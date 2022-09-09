@@ -532,13 +532,7 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
           this.options.background.image
         );
 
-        this.canvasContext.drawImage(
-          backgroundImage,
-          0,
-          0,
-          totalSize,
-          totalSize
-        );
+        this.canvasContext.drawImage(backgroundImage, 0, 0, size, size);
       }
       if (this.options.background.colorAbove) {
         this.canvasContext.fillStyle = this.options.background.colorAbove;
