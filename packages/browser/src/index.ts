@@ -9,9 +9,12 @@ function createCanvas(width: number, height: number) {
 }
 
 function loadImage(url: string) {
-  const image = new Image();
-  image.src = url;
-  return image;
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.addEventListener("load", () => resolve(image));
+    image.addEventListener("error", reject);
+    image.src = url;
+  });
 }
 
 export function QRCodeBrowser(canvas: HTMLCanvasElement, options: Options) {
