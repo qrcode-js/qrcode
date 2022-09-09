@@ -1,18 +1,25 @@
 import { QRCodeModel, QRErrorCorrectLevel, QRUtil } from "./qrcode.js";
 import type { Options } from "./types.js";
 
-export class AwesomeQR<C> {
+interface BaseCanvas {
+  width: number;
+  height: number;
+  getContext: (ctx: "2d") => any;
+  toBuffer?: () => any;
+}
+
+export class AwesomeQR<Canvas extends BaseCanvas> {
   // Functions dependent on environment (Node.js or browser)
-  private createCanvas: (width: number, height: number) => any;
-  private loadImage: any;
+  private createCanvas;
+  private loadImage;
 
   // Output canvas and context
-  // In browser is passed with invocation
+  // In browser it is passed with invocation
   // In Node it is created at runtime
-  private canvas: any;
-  private canvasContext: any;
-  private qrCode: QRCodeModel;
-  private options: Options;
+  private canvas;
+  private canvasContext;
+  private qrCode;
+  private options;
 
   static CorrectLevel = QRErrorCorrectLevel;
 
@@ -35,8 +42,8 @@ export class AwesomeQR<C> {
   };
 
   constructor(
-    canvas: C,
-    createCanvas: (width: number, height: number) => C,
+    canvas: Canvas,
+    createCanvas: (width: number, height: number) => Canvas,
     loadImage: any,
     options: Options
   ) {
@@ -300,7 +307,7 @@ export class AwesomeQR<C> {
     const totalSize = viewportSize + 2 * marginCeiled;
 
     const mainCanvas = this.createCanvas(totalSize, totalSize);
-    const mainCanvasContext: any = mainCanvas.getContext("2d");
+    const mainCanvasContext = mainCanvas.getContext("2d");
     mainCanvasContext.fillStyle =
       this.options.color ?? AwesomeQR.defaultOptions.color ?? "";
 
