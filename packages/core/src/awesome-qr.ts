@@ -53,6 +53,9 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
     this.loadImage = loadImage;
     this.options = options;
 
+    const size = this.options.size ?? AwesomeQR.defaultOptions.size ?? 0;
+    this.canvas.width = size;
+    this.canvas.height = size;
     this.canvasContext = this.canvas.getContext("2d");
 
     const correctLevel =
