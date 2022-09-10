@@ -11,6 +11,13 @@ interface BaseCanvas {
 const clamp = (val: number, min: number, max: number) =>
   Math.min(Math.max(val, min), max);
 
+type ExcludedProperties =
+  | "gradient"
+  | "background"
+  | "drawFunction"
+  | "onEvent"
+  | "text";
+
 export class AwesomeQR<Canvas extends BaseCanvas> {
   // Functions dependent on environment (Node.js or browser)
   private createCanvas;
@@ -26,8 +33,7 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
 
   static CorrectLevel = QRErrorCorrectLevel;
 
-  static defaultOptions: Options = {
-    text: "",
+  static defaultOptions: Required<Omit<Options, ExcludedProperties>> = {
     size: 400,
     margin: { size: 20 },
     color: "#000000",
@@ -56,32 +62,30 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
     this.loadImage = loadImage;
     this.options = options;
 
-    const size = this.options.size ?? AwesomeQR.defaultOptions.size ?? 0;
+    const size = this.options.size ?? AwesomeQR.defaultOptions.size;
     this.canvas.width = size;
     this.canvas.height = size;
     this.canvasContext = this.canvas.getContext("2d");
 
     const correctLevel =
       this.options.qr?.correctLevel ??
-      AwesomeQR.defaultOptions.qr?.correctLevel ??
+      AwesomeQR.defaultOptions.qr.correctLevel ??
       0;
     this.qrCode = new QRCodeModel(-1, correctLevel);
 
-    const maskPattern =
-      this.options.qr?.maskPattern ??
-      AwesomeQR.defaultOptions.qr?.maskPattern ??
-      0;
-    if (Number.isInteger(maskPattern)) {
+    const maskPattern = this.options.qr?.maskPattern;
+    if (maskPattern && Number.isInteger(maskPattern)) {
       this.qrCode.maskPattern = maskPattern;
     }
 
-    const version =
-      this.options.qr?.version ?? AwesomeQR.defaultOptions.qr?.version ?? 0;
-    if (Number.isInteger(version)) {
+    const version = this.options.qr?.version;
+    if (version && Number.isInteger(version)) {
       this.qrCode.typeNumber = version;
     }
 
-    this.qrCode.addData(this.options.text);
+    this.qrCode.addData(
+      this.options.text || "https://github.com/qrcode-js/qrcode"
+    );
     this.qrCode.make();
   }
 
@@ -206,11 +210,11 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
     }
   ) {
     let scale =
-      this.options.dots?.scale ?? AwesomeQR.defaultOptions.dots?.scale ?? 1;
+      this.options.dots?.scale ?? AwesomeQR.defaultOptions.dots.scale ?? 1;
     scale = clamp(scale, 0, 1);
 
     let round =
-      this.options.dots?.round ?? AwesomeQR.defaultOptions.dots?.round ?? 0;
+      this.options.dots?.round ?? AwesomeQR.defaultOptions.dots.round ?? 0;
     round = clamp(round, 0, 1);
 
     const drawFunction = this.options.drawFunction;
@@ -247,7 +251,7 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
   ) {
     // range [0-1]
     let round =
-      this.options.finder?.round ?? AwesomeQR.defaultOptions.finder?.round ?? 0;
+      this.options.finder?.round ?? AwesomeQR.defaultOptions.finder.round ?? 0;
     round = clamp(round, 0, 1);
     AwesomeQR._prepareRoundedCornerClip(
       canvasContext,
@@ -286,12 +290,12 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
     /**
      * Original size
      */
-    const size = this.options.size ?? AwesomeQR.defaultOptions.size ?? 0;
+    const size = this.options.size ?? AwesomeQR.defaultOptions.size;
     /**
      * Original margin
      */
     let margin =
-      this.options.margin?.size ?? AwesomeQR.defaultOptions.margin?.size ?? 0;
+      this.options.margin?.size ?? AwesomeQR.defaultOptions.margin.size ?? 0;
 
     if (margin < 0 || margin * 2 >= size) {
       margin = 0;
@@ -315,7 +319,7 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
     const mainCanvas = this.createCanvas(totalSize, totalSize);
     const mainCanvasContext = mainCanvas.getContext("2d");
     mainCanvasContext.fillStyle =
-      this.options.color ?? AwesomeQR.defaultOptions.color ?? "";
+      this.options.color ?? AwesomeQR.defaultOptions.color;
 
     this._clear();
 
@@ -337,11 +341,11 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
     let logoSide: number = nCount / 2;
     if (this.options.logo?.image) {
       let logoScale =
-        this.options.logo.scale ?? AwesomeQR.defaultOptions.logo?.scale ?? 0;
+        this.options.logo.scale ?? AwesomeQR.defaultOptions.logo.scale ?? 0;
       logoScale = clamp(logoScale, 0, 1);
 
       let logoMargin =
-        this.options.logo.margin ?? AwesomeQR.defaultOptions.logo?.margin ?? 0;
+        this.options.logo.margin ?? AwesomeQR.defaultOptions.logo.margin ?? 0;
       if (logoMargin < 0) {
         logoMargin = 0;
       }
@@ -489,17 +493,17 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
       const logoImage = await this.loadImage(this.options.logo.image);
 
       let logoScale =
-        this.options.logo.scale ?? AwesomeQR.defaultOptions.logo?.scale ?? 1;
+        this.options.logo.scale ?? AwesomeQR.defaultOptions.logo.scale ?? 1;
       logoScale = clamp(logoScale, 0, 1);
 
       let logoMargin =
-        this.options.logo.margin ?? AwesomeQR.defaultOptions.logo?.margin ?? 0;
+        this.options.logo.margin ?? AwesomeQR.defaultOptions.logo.margin ?? 0;
       if (logoMargin < 0) {
         logoMargin = 0;
       }
 
       let logoCornerRound =
-        this.options.logo.round ?? AwesomeQR.defaultOptions.logo?.round ?? 0;
+        this.options.logo.round ?? AwesomeQR.defaultOptions.logo.round ?? 0;
       logoCornerRound = clamp(logoCornerRound, 0, 1);
 
       const logoSize = viewportSize * logoScale;
