@@ -8,6 +8,9 @@ interface BaseCanvas {
   toBuffer?: () => any;
 }
 
+const clamp = (val: number, min: number, max: number) =>
+  Math.min(Math.max(val, min), max);
+
 export class AwesomeQR<Canvas extends BaseCanvas> {
   // Functions dependent on environment (Node.js or browser)
   private createCanvas;
@@ -204,11 +207,11 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
   ) {
     let scale =
       this.options.dots?.scale ?? AwesomeQR.defaultOptions.dots?.scale ?? 1;
-    scale = Math.min(Math.max(scale, 0), 1);
+    scale = clamp(scale, 0, 1);
 
     let round =
       this.options.dots?.round ?? AwesomeQR.defaultOptions.dots?.round ?? 0;
-    round = Math.min(Math.max(round, 0), 1);
+    round = clamp(round, 0, 1);
 
     const drawFunction = this.options.drawFunction;
     if (drawFunction === undefined) {
@@ -245,7 +248,7 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
     // range [0-1]
     let round =
       this.options.finder?.round ?? AwesomeQR.defaultOptions.finder?.round ?? 0;
-    round = Math.min(Math.max(round, 0), 1);
+    round = clamp(round, 0, 1);
     AwesomeQR._prepareRoundedCornerClip(
       canvasContext,
       left * size,
@@ -335,7 +338,7 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
     if (this.options.logo?.image) {
       let logoScale =
         this.options.logo.scale ?? AwesomeQR.defaultOptions.logo?.scale ?? 0;
-      logoScale = Math.min(Math.max(logoScale, 0), 1);
+      logoScale = clamp(logoScale, 0, 1);
 
       let logoMargin =
         this.options.logo.margin ?? AwesomeQR.defaultOptions.logo?.margin ?? 0;
@@ -487,7 +490,7 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
 
       let logoScale =
         this.options.logo.scale ?? AwesomeQR.defaultOptions.logo?.scale ?? 1;
-      logoScale = Math.min(Math.max(logoScale, 0), 1);
+      logoScale = clamp(logoScale, 0, 1);
 
       let logoMargin =
         this.options.logo.margin ?? AwesomeQR.defaultOptions.logo?.margin ?? 0;
@@ -497,7 +500,7 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
 
       let logoCornerRound =
         this.options.logo.round ?? AwesomeQR.defaultOptions.logo?.round ?? 0;
-      logoCornerRound = Math.min(Math.max(logoCornerRound, 0), 1);
+      logoCornerRound = clamp(logoCornerRound, 0, 1);
 
       const logoSize = viewportSize * logoScale;
       const logoX = 0.5 * (viewportSize - logoSize);
