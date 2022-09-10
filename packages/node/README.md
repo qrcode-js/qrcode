@@ -66,11 +66,10 @@ Options are two, `--help` and `--opt`.
 `--help` will show a help message and exit.
 
 `--opt` is used to set individual options for the QR.
-To use this you have to separate key and value by a `=` char.
-Numbers are automatically parsed. To set a nested parameter use the "dot" syntax by Lodash (internally it's used). See example below to better understand.
+Numbers are automatically parsed. To set a nested parameter use the "dot" syntax by Lodash. See example below to better understand.
 
 ### Example
 
 ```shell
-npx qrcode --opt text="This is a text" --opt size=1000 --opt dots.round=0.5 ./qrcode.png
+npx qrcode --opt.text="This is a text" --opt.size=1000 --opt.dots.round=0.5 ./qrcode.png
 ```
