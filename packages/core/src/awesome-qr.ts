@@ -11,6 +11,14 @@ interface BaseCanvas {
 const clamp = (val: number, min: number, max: number) =>
   Math.min(Math.max(val, min), max);
 
+interface LogoOptions {
+  image: any;
+  scale: number;
+  logoX: number;
+  logoY: number;
+  margin: number;
+}
+
 type ExcludedProperties =
   | "gradient"
   | "background"
@@ -338,8 +346,12 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
       this.qrCode.typeNumber
     );
 
-    let logoSide: number = nCount / 2;
+    let logoOptions: LogoOptions | null = null;
+    let logoSideX: number = nCount / 2;
+    let logoSideY: number = nCount / 2;
     if (this.options.logo?.image) {
+      const logoImage = await this.loadImage(this.options.logo.image);
+
       let logoScale =
         this.options.logo.scale ?? AwesomeQR.defaultOptions.logo.scale ?? 0;
       logoScale = clamp(logoScale, 0, 1);
@@ -350,17 +362,35 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
         logoMargin = 0;
       }
 
-      const logoSize = viewportSize * logoScale;
-      const logoX = 0.5 * (viewportSize - logoSize);
+      let displayRatioX = 1;
+      let displayRatioY = 1;
+      if (logoImage.width > logoImage.height) {
+        displayRatioY = logoImage.height / logoImage.width;
+      } else {
+        displayRatioX = logoImage.width / logoImage.height;
+      }
 
-      logoSide = Math.floor(logoX / nSize);
+      const logoSize = viewportSize * logoScale;
+      const logoX = 0.5 * (viewportSize - logoSize * displayRatioX);
+      const logoY = 0.5 * (viewportSize - logoSize * displayRatioY);
+
+      logoSideX = Math.floor(logoX / nSize);
+      logoSideY = Math.floor(logoY / nSize);
+
+      logoOptions = {
+        scale: logoScale,
+        image: logoImage,
+        logoX,
+        logoY,
+        margin: logoMargin,
+      };
     }
 
     const isInLogoZone = (row: number, col: number) =>
-      col >= logoSide &&
-      col < nCount - logoSide &&
-      row >= logoSide &&
-      row < nCount - logoSide;
+      col >= logoSideX &&
+      col < nCount - logoSideX &&
+      row >= logoSideY &&
+      row < nCount - logoSideY;
 
     for (let row = 0; row < nCount; row++) {
       for (let col = 0; col < nCount; col++) {
@@ -489,37 +519,34 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
       );
     }
 
-    if (this.options.logo?.image) {
-      const logoImage = await this.loadImage(this.options.logo.image);
-
-      let logoScale =
-        this.options.logo.scale ?? AwesomeQR.defaultOptions.logo.scale ?? 1;
-      logoScale = clamp(logoScale, 0, 1);
-
-      let logoMargin =
-        this.options.logo.margin ?? AwesomeQR.defaultOptions.logo.margin ?? 0;
-      if (logoMargin < 0) {
-        logoMargin = 0;
-      }
-
+    if (logoOptions) {
       let logoCornerRound =
-        this.options.logo.round ?? AwesomeQR.defaultOptions.logo.round ?? 0;
+        this.options.logo?.round ?? AwesomeQR.defaultOptions.logo.round ?? 0;
       logoCornerRound = clamp(logoCornerRound, 0, 1);
 
-      const logoSize = viewportSize * logoScale;
-      const logoX = 0.5 * (viewportSize - logoSize);
+      const logoSpaceWidth = viewportSize - 2 * logoOptions.logoX;
+      const logoSpaceHeight = viewportSize - 2 * logoOptions.logoY;
+      const isHeightMinor = logoSpaceHeight < logoSpaceWidth;
 
       // Draw logo image
       AwesomeQR._prepareRoundedCornerClip(
         mainCanvasContext,
-        logoX,
-        logoX,
-        logoSize,
-        logoSize,
-        logoCornerRound * logoSize * 0.5
+        logoOptions.logoX,
+        logoOptions.logoY,
+        logoSpaceWidth,
+        logoSpaceHeight,
+        logoCornerRound *
+          0.5 *
+          (isHeightMinor ? logoSpaceHeight : logoSpaceWidth)
       );
       mainCanvasContext.clip();
-      mainCanvasContext.drawImage(logoImage, logoX, logoX, logoSize, logoSize);
+      mainCanvasContext.drawImage(
+        logoOptions.image,
+        logoOptions.logoX,
+        logoOptions.logoY,
+        logoSpaceWidth,
+        logoSpaceHeight
+      );
     }
 
     if (this.options.onEvent) {
