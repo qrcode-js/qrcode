@@ -33,11 +33,11 @@ jobs:
       - name: Run Tests
         run: |
           npm run test
-          test -f packages/node/dist/qrcode.png || {echo "File not found"; exit 1}
+          test -f packages/node/dist/qrcode.png || (echo "File not found" && exit 1)
       - name: Run cli and test it
         run: |
           node packages/node/lib/cli.js --opt.color white --opt.finder.round 0.5 qrcode-cli.png
-          test -f qrcode-cli.png || {echo "File not found"; exit 1}
+          test -f qrcode-cli.png || (echo "File not found" && exit 1)
       - name: Run update-readme
         run: npm run update-readme
       - name: Run prettier on Readmes
