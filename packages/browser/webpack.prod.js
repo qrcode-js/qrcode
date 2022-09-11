@@ -1,4 +1,5 @@
-import path from "path";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 export default {
   mode: "production",
@@ -16,7 +17,7 @@ export default {
     extensions: [".ts", ".js"],
   },
   output: {
-    path: path.resolve(path.dirname(import.meta.url).slice(8), "./dist"),
+    path: path.join(fileURLToPath(import.meta.url), "../dist"),
     filename: "index.js",
     libraryTarget: "umd",
     globalObject: "this",
