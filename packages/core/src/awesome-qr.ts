@@ -370,9 +370,9 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
         displayRatioX = logoImage.width / logoImage.height;
       }
 
-      const logoSize = viewportSize * logoScale;
-      const logoX = 0.5 * (viewportSize - logoSize * displayRatioX);
-      const logoY = 0.5 * (viewportSize - logoSize * displayRatioY);
+      const logoSpace = viewportSize * logoScale;
+      const logoX = 0.5 * (viewportSize - logoSpace * displayRatioX);
+      const logoY = 0.5 * (viewportSize - logoSpace * displayRatioY);
 
       logoSideX = Math.floor((logoX - logoMargin) / nSize);
       logoSideY = Math.floor((logoY - logoMargin) / nSize);
