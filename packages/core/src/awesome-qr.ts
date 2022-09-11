@@ -16,7 +16,6 @@ interface LogoOptions {
   scale: number;
   logoX: number;
   logoY: number;
-  margin: number;
 }
 
 type ExcludedProperties =
@@ -382,7 +381,6 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
         image: logoImage,
         logoX,
         logoY,
-        margin: logoMargin,
       };
     }
 
