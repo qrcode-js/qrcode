@@ -2,7 +2,8 @@ import QRCodeNode from "./lib/index.js";
 import fs from "node:fs/promises";
 
 async function init() {
-  const myQR = QRCodeNode({
+  const myQR = QRCodeNode();
+  myQR.setOptions({
     text: "https://github.com/qrcode-js/qrcode",
     color: "#005c66",
     size: 1000,

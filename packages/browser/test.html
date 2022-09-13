@@ -12,7 +12,8 @@
     <script>
       const canvas = document.getElementById("canvas");
       const context = canvas.getContext("2d");
-      const myQR = QRCode.QRCodeBrowser(canvas, {
+      const myQR = QRCode.QRCodeBrowser(canvas);
+      myQR.setOptions({
         text: "https://github.com/qrcode-js/qrcode",
         color: "#005c66",
         size: 450,
