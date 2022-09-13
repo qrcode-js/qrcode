@@ -35,8 +35,8 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
   // In Node it is created at runtime
   private canvas;
   private canvasContext;
-  private qrCode;
-  private options;
+  private qrCode: QRCodeModel | null = null;
+  private options: Options | null = null;
 
   static CorrectLevel = QRErrorCorrectLevel;
 
@@ -60,19 +60,23 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
   constructor(
     canvas: Canvas,
     createCanvas: (width: number, height: number) => Canvas,
-    loadImage: any,
-    options: Options
+    loadImage: any
   ) {
     // Save arguments
     this.canvas = canvas;
     this.createCanvas = createCanvas;
     this.loadImage = loadImage;
+    this.canvasContext = this.canvas.getContext("2d");
+  }
+
+  setOptions(options: Options) {
+    if (!options) return;
+
     this.options = options;
 
     const size = this.options.size ?? AwesomeQR.defaultOptions.size;
     this.canvas.width = size;
     this.canvas.height = size;
-    this.canvasContext = this.canvas.getContext("2d");
 
     const correctLevel =
       this.options.qr?.correctLevel ??
@@ -216,6 +220,7 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
       bottom: boolean;
     }
   ) {
+    if (!this.options) return;
     let scale =
       this.options.dots?.scale ?? AwesomeQR.defaultOptions.dots.scale ?? 1;
     scale = clamp(scale, 0, 1);
@@ -256,6 +261,7 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
     top: number,
     size: number
   ) {
+    if (!this.options) return;
     // range [0-1]
     let round =
       this.options.finder?.round ?? AwesomeQR.defaultOptions.finder.round ?? 0;
@@ -290,6 +296,8 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
   }
 
   private async _draw(): Promise<Buffer | undefined> {
+    if (!this.options || !this.qrCode)
+      throw new Error("Must call setOptions before draw");
     /**
      * Count of the squares
      */
