@@ -1,4 +1,4 @@
-import { AwesomeQR, Options } from "@qrcode-js/core";
+import { AwesomeQR } from "@qrcode-js/core";
 export { AwesomeQR };
 
 function createCanvas(width: number, height: number) {
@@ -17,6 +17,6 @@ function loadImage(url: string) {
   });
 }
 
-export function QRCodeBrowser(canvas: HTMLCanvasElement, options: Options) {
-  return new AwesomeQR(canvas, createCanvas, loadImage, options);
+export function QRCodeBrowser(canvas: HTMLCanvasElement) {
+  return new AwesomeQR(canvas, createCanvas, loadImage);
 }

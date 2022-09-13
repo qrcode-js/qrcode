@@ -28,7 +28,8 @@ async function main(): Promise<void> {
 }
 
 function handleDefaultCommand(args: any) {
-  const myQR = QRCodeNode(args.opt as Options);
+  const myQR = QRCodeNode();
+  myQR.setOptions(args.opt as Options);
   myQR.draw().then((d) => {
     if (!d) {
       console.error(
