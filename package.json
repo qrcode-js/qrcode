@@ -31,7 +31,7 @@
     "dev": "lerna run dev --parallel",
     "install": "lerna bootstrap",
     "lint": "eslint --fix .",
-    "postupdate-readme": "prettier --write *.md",
+    "postupdate-readme": "prettier --write **/*.md",
     "preversion": "npm run update-readme && git add *.md",
     "test": "lerna run test --parallel",
     "update-readme": "node scripts/update-readme.js"
