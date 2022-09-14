@@ -68,7 +68,7 @@ function handleParserChild(child, sourceCode) {
   if (child.type.kind === ts.SyntaxKind.TypeLiteral) {
     const [_code, _text] = handleTypeLiteral(child, sourceCode);
     code += " " + _code + ";";
-    text += _text;
+    if (name == "Options") text += _text;
   } else if (child.type.kind === ts.SyntaxKind.UnionType) {
     code += sourceCode.substring(child.type.pos, child.type.end) + ";\n";
     // No text
