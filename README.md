@@ -45,6 +45,21 @@ If you're looking for examples, check out the wrappers (Node and Browser).
 ## API
 
 ```typescript
+type ColorStop = {
+  color: string;
+  stop: number;
+};
+type LinearGradientDirections = "to-left" | "to-bottom";
+
+type RadialGradient = {
+  colorStops: ColorStop[];
+  type: "round";
+};
+type LinearGradient = {
+  colorStops: ColorStop[];
+  direction: LinearGradientDirections;
+  type: "linear";
+};
 type Options = {
   text: string;
   background?: {
@@ -61,7 +76,7 @@ type Options = {
   finder?: {
     round?: number;
   };
-  gradient?: Function;
+  gradient?: Union;
   logo?: {
     image: Union;
     margin?: number;
@@ -82,6 +97,7 @@ type Options = {
 };
 type EventTypes =
   | "start-foreground"
+  | "gradient"
   | "end-foreground"
   | "start-background"
   | "end-background"
@@ -231,11 +247,15 @@ Percentage to round the three finder in the QR
 
 ### gradient
 
-**Type** `(ctx: any, size: number) => any`
+**Type** `((ctx: any, size: number) => any) | LinearGradient | RadialGradient`
 
 Function for creating a gradient as foreground color
 
-Must return a CanvasGradient
+Can be of three types:
+
+- A function that return a CanvasGradient object
+- A LinearGradient object
+- A RadialGradient object
 
 Overrides colorDark option
 

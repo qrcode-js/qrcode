@@ -482,17 +482,52 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
     this._drawFinder(mainCanvasContext, nCount - 7, 0, nSize);
     this._drawFinder(mainCanvasContext, 0, nCount - 7, nSize);
 
+    let gradient;
     if (typeof this.options.gradient === "function") {
-      const gradient = this.options.gradient(mainCanvasContext, viewportSize);
-      if (gradient?.toString() == "[object CanvasGradient]") {
-        mainCanvasContext.fillStyle = gradient;
-        mainCanvasContext.globalCompositeOperation = "source-in";
-        mainCanvasContext.fillRect(0, 0, viewportSize, viewportSize);
-        mainCanvasContext.globalCompositeOperation = "source-over";
+      const grad = this.options.gradient(mainCanvasContext, viewportSize);
+      if (grad?.toString() == "[object CanvasGradient]") {
+        gradient = grad;
       } else {
         console.error(
           "Returned object from gradient function does not seem to be a Gradient"
         );
+      }
+    } else if (typeof this.options.gradient === "object") {
+      if (this.options.gradient.type === "linear") {
+        const direction = this.options.gradient.direction;
+        gradient = mainCanvasContext.createLinearGradient(
+          0,
+          0,
+          direction === "to-left" ? viewportSize : 0,
+          direction === "to-bottom" ? viewportSize : 0
+        );
+      } else {
+        gradient = mainCanvasContext.createRadialGradient(
+          viewportSize / 2,
+          viewportSize / 2,
+          0,
+          viewportSize / 2,
+          viewportSize / 2,
+          (viewportSize / 2) * Math.SQRT2
+        );
+      }
+      for (const colorStop of this.options.gradient.colorStops) {
+        gradient.addColorStop(colorStop.stop, colorStop.color);
+      }
+    }
+
+    if (gradient) {
+      mainCanvasContext.fillStyle = gradient;
+      mainCanvasContext.globalCompositeOperation = "source-in";
+      mainCanvasContext.fillRect(0, 0, viewportSize, viewportSize);
+      mainCanvasContext.globalCompositeOperation = "source-over";
+    } else {
+      if (this.options.onEvent) {
+        this.options.onEvent("gradient", mainCanvasContext, {
+          nSize,
+          nCount,
+          size: viewportSize,
+        });
       }
     }
 

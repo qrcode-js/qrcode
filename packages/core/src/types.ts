@@ -1,3 +1,21 @@
+type ColorStop = {
+  color: string;
+  stop: number;
+};
+
+type LinearGradientDirections = "to-left" | "to-bottom";
+
+type RadialGradient = {
+  type: "round";
+  colorStops: ColorStop[];
+};
+
+type LinearGradient = {
+  type: "linear";
+  direction: LinearGradientDirections;
+  colorStops: ColorStop[];
+};
+
 export type Options = {
   /**
    * Text to be encoded in the QR code.
@@ -118,11 +136,17 @@ export type Options = {
   /**
    * Function for creating a gradient as foreground color
    *
-   * Must return a CanvasGradient
+   * Can be of three types:
+   * - A function that return a CanvasGradient object
+   * - A LinearGradient object
+   * - A RadialGradient object
    *
    * Overrides colorDark option
    */
-  gradient?: (ctx: any, size: number) => any;
+  gradient?:
+    | ((ctx: any, size: number) => any)
+    | LinearGradient
+    | RadialGradient;
 
   /**
    * Background options
@@ -245,6 +269,7 @@ export type Options = {
 
 type EventTypes =
   | "start-foreground"
+  | "gradient"
   | "end-foreground"
   | "start-background"
   | "end-background"
