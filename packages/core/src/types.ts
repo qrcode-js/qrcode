@@ -3,7 +3,7 @@ type ColorStop = {
   stop: number;
 };
 
-type LinearGradientDirections = "to-left" | "to-bottom";
+type LinearGradientDirections = "to-right" | "to-bottom";
 
 type RadialGradient = {
   type: "round";

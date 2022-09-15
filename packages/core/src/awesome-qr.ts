@@ -498,7 +498,7 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
         gradient = mainCanvasContext.createLinearGradient(
           0,
           0,
-          direction === "to-left" ? viewportSize : 0,
+          direction === "to-right" ? viewportSize : 0,
           direction === "to-bottom" ? viewportSize : 0
         );
       } else {

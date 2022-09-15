@@ -49,7 +49,7 @@ type ColorStop = {
   color: string;
   stop: number;
 };
-type LinearGradientDirections = "to-left" | "to-bottom";
+type LinearGradientDirections = "to-right" | "to-bottom";
 
 type RadialGradient = {
   colorStops: ColorStop[];
