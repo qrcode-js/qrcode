@@ -295,7 +295,7 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
     canvasContext.fill();
   }
 
-  private async _draw(): Promise<Buffer | undefined> {
+  private async _drawForeground(): Promise<Canvas> {
     if (!this.options || !this.qrCode)
       throw new Error("Must call setOptions before draw");
     /**
@@ -305,42 +305,21 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
     /**
      * Original size
      */
-    const size = this.options.size ?? AwesomeQR.defaultOptions.size;
-    /**
-     * Original margin
-     */
-    let margin =
-      this.options.margin?.size ?? AwesomeQR.defaultOptions.margin.size ?? 0;
-
-    if (margin < 0 || margin * 2 >= size) {
-      margin = 0;
-    }
-
-    const marginCeiled = Math.ceil(margin);
+    const initialSize = this.options.size ?? AwesomeQR.defaultOptions.size;
 
     /**
      * Size of a single dot
      */
-    const nSize = Math.ceil((size - 2 * margin) / nCount);
+    const nSize = Math.ceil(initialSize / nCount);
     /**
-     * Internal size (no margin)
+     * Internal size
      */
-    const viewportSize = nSize * nCount;
-    /**
-     * Internal size + 2 * margin
-     */
-    const totalSize = viewportSize + 2 * marginCeiled;
+    const size = nSize * nCount;
 
-    const mainCanvas = this.createCanvas(totalSize, totalSize);
+    const mainCanvas = this.createCanvas(size, size);
     const mainCanvasContext = mainCanvas.getContext("2d");
     mainCanvasContext.fillStyle =
       this.options.color ?? AwesomeQR.defaultOptions.color;
-
-    this._clear();
-
-    // Translate to make the top and left margins off the viewport
-    mainCanvasContext.save();
-    mainCanvasContext.translate(marginCeiled, marginCeiled);
 
     if (this.options.onEvent) {
       this.options.onEvent("start-foreground", mainCanvasContext, {
@@ -377,9 +356,9 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
         displayRatioX = logoImage.width / logoImage.height;
       }
 
-      const logoSpace = viewportSize * logoScale;
-      const logoX = 0.5 * (viewportSize - logoSpace * displayRatioX);
-      const logoY = 0.5 * (viewportSize - logoSpace * displayRatioY);
+      const logoSpace = size * logoScale;
+      const logoX = 0.5 * (size - logoSpace * displayRatioX);
+      const logoY = 0.5 * (size - logoSpace * displayRatioY);
 
       logoSideX = Math.floor((logoX - logoMargin) / nSize);
       logoSideY = Math.floor((logoY - logoMargin) / nSize);
@@ -484,7 +463,7 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
 
     let gradient;
     if (typeof this.options.gradient === "function") {
-      const grad = this.options.gradient(mainCanvasContext, viewportSize);
+      const grad = this.options.gradient(mainCanvasContext, size);
       if (grad?.toString() == "[object CanvasGradient]") {
         gradient = grad;
       } else {
@@ -498,17 +477,17 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
         gradient = mainCanvasContext.createLinearGradient(
           0,
           0,
-          direction === "to-right" ? viewportSize : 0,
-          direction === "to-bottom" ? viewportSize : 0
+          direction === "to-right" ? size : 0,
+          direction === "to-bottom" ? size : 0
         );
       } else {
         gradient = mainCanvasContext.createRadialGradient(
-          viewportSize / 2,
-          viewportSize / 2,
+          size / 2,
+          size / 2,
           0,
-          viewportSize / 2,
-          viewportSize / 2,
-          (viewportSize / 2) * Math.SQRT2
+          size / 2,
+          size / 2,
+          (size / 2) * Math.SQRT2
         );
       }
       for (const colorStop of this.options.gradient.colorStops) {
@@ -519,45 +498,16 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
     if (gradient) {
       mainCanvasContext.fillStyle = gradient;
       mainCanvasContext.globalCompositeOperation = "source-in";
-      mainCanvasContext.fillRect(0, 0, viewportSize, viewportSize);
+      mainCanvasContext.fillRect(0, 0, size, size);
       mainCanvasContext.globalCompositeOperation = "source-over";
     } else {
       if (this.options.onEvent) {
         this.options.onEvent("gradient", mainCanvasContext, {
           nSize,
           nCount,
-          size: viewportSize,
+          size,
         });
       }
-    }
-
-    // Fill the margin
-    if (this.options.margin?.color) {
-      mainCanvasContext.fillStyle = this.options.margin.color;
-      mainCanvasContext.fillRect(
-        -marginCeiled,
-        -marginCeiled,
-        totalSize - marginCeiled,
-        marginCeiled
-      );
-      mainCanvasContext.fillRect(
-        viewportSize,
-        -marginCeiled,
-        marginCeiled,
-        totalSize - marginCeiled
-      );
-      mainCanvasContext.fillRect(
-        0,
-        viewportSize,
-        totalSize - marginCeiled,
-        marginCeiled
-      );
-      mainCanvasContext.fillRect(
-        -marginCeiled,
-        0,
-        marginCeiled,
-        totalSize - marginCeiled
-      );
     }
 
     if (logoOptions) {
@@ -565,8 +515,8 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
         this.options.logo?.round ?? AwesomeQR.defaultOptions.logo.round ?? 0;
       logoCornerRound = clamp(logoCornerRound, 0, 1);
 
-      const logoSpaceWidth = viewportSize - 2 * logoOptions.logoX;
-      const logoSpaceHeight = viewportSize - 2 * logoOptions.logoY;
+      const logoSpaceWidth = size - 2 * logoOptions.logoX;
+      const logoSpaceHeight = size - 2 * logoOptions.logoY;
       const isHeightMinor = logoSpaceHeight < logoSpaceWidth;
 
       // Draw logo image
@@ -597,39 +547,100 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
       });
     }
 
-    if (this.options.background) {
-      if (this.options.onEvent) {
-        this.options.onEvent("start-background", this.canvasContext);
-      }
-      if (this.options.background.colorBelow) {
-        this.canvasContext.fillStyle = this.options.background.colorBelow;
-        this.canvasContext.fillRect(0, 0, size, size);
-      }
-      if (this.options.background.image) {
-        const backgroundImage = await this.loadImage(
-          this.options.background.image
-        );
+    return mainCanvas;
+  }
 
-        this.canvasContext.drawImage(backgroundImage, 0, 0, size, size);
-      }
-      if (this.options.background.colorAbove) {
-        this.canvasContext.fillStyle = this.options.background.colorAbove;
-        this.canvasContext.fillRect(0, 0, size, size);
-      }
-      if (this.options.onEvent) {
-        this.options.onEvent("end-background", this.canvasContext);
-      }
+  private async _drawBackground() {
+    if (!this.options || !this.qrCode)
+      throw new Error("Must call setOptions before draw");
+    if (!this.options.background) {
+      return;
     }
 
+    const size = this.options.size ?? AwesomeQR.defaultOptions.size ?? 0;
+    const margin =
+      this.options.margin?.size ?? AwesomeQR.defaultOptions.margin?.size ?? 0;
+    const bgMargin = this.options.margin?.color ? margin : 0;
+    if (this.options.onEvent) {
+      this.options.onEvent("start-background", this.canvasContext);
+    }
+    if (this.options.background.colorBelow) {
+      this.canvasContext.fillStyle = this.options.background.colorBelow;
+      this.canvasContext.fillRect(
+        bgMargin,
+        bgMargin,
+        size - 2 * bgMargin,
+        size - 2 * bgMargin
+      );
+    }
+    if (this.options.background.image) {
+      const backgroundImage = await this.loadImage(
+        this.options.background.image
+      );
+      this.canvasContext.drawImage(
+        backgroundImage,
+        bgMargin,
+        bgMargin,
+        size - 2 * bgMargin,
+        size - 2 * bgMargin
+      );
+    }
+    if (this.options.background.colorAbove) {
+      this.canvasContext.fillStyle = this.options.background.colorAbove;
+      this.canvasContext.fillRect(
+        bgMargin,
+        bgMargin,
+        size - 2 * bgMargin,
+        size - 2 * bgMargin
+      );
+    }
+    if (this.options.onEvent) {
+      this.options.onEvent("end-background", this.canvasContext);
+    }
+  }
+
+  private async _draw(): Promise<Buffer | undefined> {
+    if (!this.options || !this.qrCode)
+      throw new Error("Must call setOptions before draw");
+
+    const size = this.options.size ?? AwesomeQR.defaultOptions.size ?? 0;
+
+    let margin =
+      this.options.margin?.size ?? AwesomeQR.defaultOptions.margin.size ?? 0;
+
+    if (margin < 0 || margin * 2 >= size) {
+      margin = 0;
+    }
+
+    this._clear();
+
+    const mainCanvas = await this._drawForeground();
+    await this._drawBackground();
+
     // Apply foreground to final canvas
-    this.canvasContext.drawImage(mainCanvas, 0, 0, size, size);
+    this.canvasContext.drawImage(
+      mainCanvas,
+      margin,
+      margin,
+      size - 2 * margin,
+      size - 2 * margin
+    );
+
+    // Fill the margin
+    if (this.options.margin?.color) {
+      this.canvasContext.fillStyle = this.options.margin.color;
+      this.canvasContext.fillRect(0, 0, size - margin, margin);
+      this.canvasContext.fillRect(size - margin, 0, margin, size - margin);
+      this.canvasContext.fillRect(margin, size - margin, size - margin, margin);
+      this.canvasContext.fillRect(0, margin, margin, size - margin);
+    }
 
     if (this.options.onEvent) {
       this.options.onEvent("final-canvas", this.canvasContext);
     }
 
     if (this.canvas.toBuffer) {
-      return Promise.resolve(this.canvas.toBuffer());
+      return this.canvas.toBuffer();
     }
 
     return;
