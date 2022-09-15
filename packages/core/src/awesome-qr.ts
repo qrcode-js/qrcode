@@ -230,9 +230,7 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
     round = clamp(round, 0, 1);
 
     const drawFunction = this.options.drawFunction;
-    if (drawFunction === undefined) {
-      return AwesomeQR._drawDot(canvasContext, left, top, nSize, scale, round);
-    } else if (drawFunction == "telegram") {
+    if (drawFunction === "telegram") {
       return AwesomeQR._drawTelegramDot(
         canvasContext,
         left,
@@ -252,6 +250,8 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
         parameters,
         otherCells
       );
+    } else {
+      return AwesomeQR._drawDot(canvasContext, left, top, nSize, scale, round);
     }
   }
 
