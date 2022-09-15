@@ -23,22 +23,172 @@ export type Options = {
   text: string;
 
   /**
-   * Size of the QR code in pixel.
-   *
-   * @defaultValue 400
+   * Background options
    */
-  size?: number;
+  background?: {
+    /**
+     * Color of the dimming mask above the background image.
+     *
+     * Accepts a CSS &lt;color&gt;.
+     *
+     * For more information about CSS &lt;color&gt;, please refer to [https://developer.mozilla.org/en-US/docs/Web/CSS/color_value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
+     *
+     * @defaultValue "rgba(0, 0, 0, 0)"
+     */
+    colorAbove?: string;
+
+    /**
+     * Color of the background of the QR.
+     *
+     * Goes behind an eventually image with `background.image` option
+     *
+     * @defaultValue "transparent"
+     */
+    colorBelow?: string;
+
+    /**
+     * Background image to be used in the QR code.
+     *
+     * Accepts a `data:` string in web browsers or a Buffer in Node.js.
+     */
+    image?: string | Buffer;
+  };
+
+  /**
+   * Color of the blocks on the QR code.
+   *
+   * Accepts a CSS &lt;color&gt;.
+   *
+   * For more information about CSS &lt;color&gt;, please refer to [https://developer.mozilla.org/en-US/docs/Web/CSS/color_value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
+   *
+   * @defaultValue "#000000"
+   */
+  color?: string;
+
+  /**
+   * Options for data/ECC dots.
+   */
+  dots?: {
+    /**
+     * Percentage to round the dots (after scaling) in the QR
+     * @range 0..1
+     * @default 0
+     */
+    round?: number;
+
+    /**
+     * Scale factor for all dots.
+     * @range 0..1
+     * @default 1
+     */
+    scale?: number;
+  };
+
+  /**
+   * Custom function to draw a custom shape as a dot in the QR.
+   *
+   * Accepts either a string or a custom function.
+   * As a string it currently accepts only "telegram" mode.
+   * As a function here are the parameters:
+   *
+   * - canvasContext: the current drawing context
+   * - left: how many cells are from the left margin
+   * - top: how many cells are from the top margin
+   * - nSize: size in pixels of a single cell
+   * - scale: scale of data blocks as provided in initial options
+   * - round: round of data block as provided in initial options
+   * - parameters: tell if the cell is special (timing or alignment) or regular
+   * - otherCells: tell if the neighbour cells are empty or full
+   */
+  drawFunction?:
+    | "telegram"
+    | ((
+        canvasContext: any,
+        left: number,
+        top: number,
+        nSize: number,
+        scale: number,
+        round: number,
+        parameters: {
+          isTiming: boolean;
+          isAlignment: boolean;
+        },
+        otherCells: {
+          top: boolean;
+          left: boolean;
+          right: boolean;
+          bottom: boolean;
+        }
+      ) => undefined);
+
+  /**
+   * Options for finder squares.
+   */
+  finder?: {
+    /**
+     * Percentage to round the three finder in the QR
+     * @range 0..1
+     * @default 0
+     */
+    round?: number;
+  };
+
+  /**
+   * Function for creating a gradient as foreground color
+   *
+   * Can be of three types:
+   * - A function that return a CanvasGradient object
+   * - A LinearGradient object
+   * - A RadialGradient object
+   *
+   * Overrides colorDark option
+   */
+  gradient?:
+    | ((ctx: any, size: number) => any)
+    | LinearGradient
+    | RadialGradient;
+
+  /**
+   * Logo options
+   */
+  logo?: {
+    /**
+     * Logo image to be displayed at the center of the QR code.
+     *
+     * Accepts a `data:` string in web browsers or a Buffer in Node.js.
+     *
+     * When set to `undefined` or `null`, the logo is disabled.
+     */
+    image: string | Buffer;
+
+    /**
+     * Size of margins around the logo image in pixels.
+     *
+     * @defaultValue 10
+     */
+    margin?: number;
+
+    /**
+     * Corner radius of the logo image in pixels.
+     *
+     * @range 0..1
+     *
+     * @defaultValue 0.4
+     */
+    round?: number;
+
+    /**
+     * Ratio of the logo size to the QR code size.
+     *
+     * @defaultValue 0.2
+     */
+    scale?: number;
+  };
 
   /**
    * Margin options
    */
   margin?: {
-    /**
-     * Size of margins around the QR code body in pixel.
-     *
-     * @defaultValue 20
-     */
-    size?: number;
     /**
      * Color of the margins.
      *
@@ -49,7 +199,26 @@ export type Options = {
      * @defaultValue "transparent"
      */
     color?: string;
+
+    /**
+     * Size of margins around the QR code body in pixel.
+     *
+     * @defaultValue 20
+     */
+    size?: number;
   };
+
+  /**
+   * Custom function called at certain phases of drawing the QR.
+   * Useful for customizing the canvas if something is not supported by this library
+   * Actually called when:
+   *
+   * - starting painting foreground
+   * - end painting foreground
+   * - starting painting background
+   * - end painting background
+   */
+  onEvent?: (type: EventTypes, canvasContext: any, parameters?: object) => void;
 
   /**
    * QR options
@@ -92,179 +261,11 @@ export type Options = {
   };
 
   /**
-   * Options for data/ECC dots.
-   */
-  dots?: {
-    /**
-     * Scale factor for all dots.
-     * @range 0..1
-     * @default 1
-     */
-    scale?: number;
-
-    /**
-     * Percentage to round the dots (after scaling) in the QR
-     * @range 0..1
-     * @default 0
-     */
-    round?: number;
-  };
-
-  /**
-   * Options for finder squares.
-   */
-  finder?: {
-    /**
-     * Percentage to round the three finder in the QR
-     * @range 0..1
-     * @default 0
-     */
-    round?: number;
-  };
-
-  /**
-   * Color of the blocks on the QR code.
+   * Size of the QR code in pixel.
    *
-   * Accepts a CSS &lt;color&gt;.
-   *
-   * For more information about CSS &lt;color&gt;, please refer to [https://developer.mozilla.org/en-US/docs/Web/CSS/color_value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
-   *
-   * @defaultValue "#000000"
+   * @defaultValue 400
    */
-  color?: string;
-
-  /**
-   * Function for creating a gradient as foreground color
-   *
-   * Can be of three types:
-   * - A function that return a CanvasGradient object
-   * - A LinearGradient object
-   * - A RadialGradient object
-   *
-   * Overrides colorDark option
-   */
-  gradient?:
-    | ((ctx: any, size: number) => any)
-    | LinearGradient
-    | RadialGradient;
-
-  /**
-   * Background options
-   */
-  background?: {
-    /**
-     * Background image to be used in the QR code.
-     *
-     * Accepts a `data:` string in web browsers or a Buffer in Node.js.
-     */
-    image?: string | Buffer;
-
-    /**
-     * Color of the dimming mask above the background image.
-     *
-     * Accepts a CSS &lt;color&gt;.
-     *
-     * For more information about CSS &lt;color&gt;, please refer to [https://developer.mozilla.org/en-US/docs/Web/CSS/color_value](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value).
-     *
-     * @defaultValue "rgba(0, 0, 0, 0)"
-     */
-    colorAbove?: string;
-
-    /**
-     * Color of the background of the QR.
-     *
-     * Goes behind an eventually image with `background.image` option
-     *
-     * @defaultValue "transparent"
-     */
-    colorBelow?: string;
-  };
-
-  /**
-   * Logo options
-   */
-  logo?: {
-    /**
-     * Logo image to be displayed at the center of the QR code.
-     *
-     * Accepts a `data:` string in web browsers or a Buffer in Node.js.
-     *
-     * When set to `undefined` or `null`, the logo is disabled.
-     */
-    image: string | Buffer;
-
-    /**
-     * Ratio of the logo size to the QR code size.
-     *
-     * @defaultValue 0.2
-     */
-    scale?: number;
-
-    /**
-     * Size of margins around the logo image in pixels.
-     *
-     * @defaultValue 10
-     */
-    margin?: number;
-
-    /**
-     * Corner radius of the logo image in pixels.
-     *
-     * @range 0..1
-     *
-     * @defaultValue 0.4
-     */
-    round?: number;
-  };
-
-  /**
-   * Custom function to draw a custom shape as a dot in the QR.
-   *
-   * Accepts either a string or a custom function.
-   * As a string it currently accepts only "telegram" mode.
-   * As a function here are the parameters:
-   *
-   * - canvasContext: the current drawing context
-   * - left: how many cells are from the left margin
-   * - top: how many cells are from the top margin
-   * - nSize: size in pixels of a single cell
-   * - scale: scale of data blocks as provided in initial options
-   * - round: round of data block as provided in initial options
-   * - parameters: tell if the cell is special (timing or alignment) or regular
-   * - otherCells: tell if the neighbour cells are empty or full
-   */
-  drawFunction?:
-    | "telegram"
-    | ((
-        canvasContext: any,
-        left: number,
-        top: number,
-        nSize: number,
-        scale: number,
-        round: number,
-        parameters: {
-          isTiming: boolean;
-          isAlignment: boolean;
-        },
-        otherCells: {
-          top: boolean;
-          left: boolean;
-          right: boolean;
-          bottom: boolean;
-        }
-      ) => undefined);
-
-  /**
-   * Custom function called at certain phases of drawing the QR.
-   * Useful for customizing the canvas if something is not supported by this library
-   * Actually called when:
-   *
-   * - starting painting foreground
-   * - end painting foreground
-   * - starting painting background
-   * - end painting background
-   */
-  onEvent?: (type: EventTypes, canvasContext: any, parameters?: object) => void;
+  size?: number;
 };
 
 type EventTypes =

@@ -41,13 +41,7 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
   static CorrectLevel = QRErrorCorrectLevel;
 
   static defaultOptions: Required<Omit<Options, ExcludedProperties>> = {
-    size: 400,
-    margin: { size: 20 },
     color: "#000000",
-    qr: {
-      correctLevel: QRErrorCorrectLevel.M,
-    },
-    logo: { scale: 0.2, margin: 10, round: 0.4, image: "" },
     dots: {
       scale: 1,
       round: 0,
@@ -55,6 +49,12 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
     finder: {
       round: 0,
     },
+    logo: { scale: 0.2, margin: 10, round: 0.4, image: "" },
+    margin: { size: 20 },
+    qr: {
+      correctLevel: QRErrorCorrectLevel.M,
+    },
+    size: 400,
   };
 
   constructor(
