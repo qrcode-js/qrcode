@@ -438,10 +438,11 @@ Behind the scenes it uses the `canvas` package to use the canvas like the built-
 
 ```typescript
 import QRCodeNode from "@qrcode-js/node";
-import { promises as fs } from "fs";
+import fs from "node:fs/promises";
 
 async function main() {
-  const myQR = QRCodeNode({
+  const myQR = QRCodeNode();
+  myQR.setOptions({
     text: "https://github.com/qrcode-js/qrcode",
     color: "#123456",
     size: 1000,
@@ -519,7 +520,8 @@ This is the wrapper around the core package to provide support in browsers.
     <script src="https://unpkg.com/@qrcode-js/browser"></script>
     <script>
       const canvas = document.getElementById("canvas");
-      const myQR = QRCode.QRCodeBrowser(canvas, {
+      const myQR = QRCode.QRCodeBrowser(canvas);
+      myQR.setOptions({
         text: "https://github.com/qrcode-js/qrcode",
         color: "#123456",
         size: 450,
