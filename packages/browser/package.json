@@ -4,7 +4,7 @@
     "url": "https://github.com/qrcode-js/qrcode/issues"
   },
   "dependencies": {
-    "@qrcode-js/core": "^0.6.1"
+    "@qrcode-js/core": "^0.6.2"
   },
   "description": "Browser version of the Awesome QR",
   "devDependencies": {
@@ -33,5 +33,5 @@
   "type": "module",
   "types": "lib/index.d.ts",
   "unpkg": "./dist/index.js",
-  "version": "0.6.1"
+  "version": "0.6.2"
 }
