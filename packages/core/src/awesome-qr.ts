@@ -1,6 +1,7 @@
 import { QRCodeModel, QRErrorCorrectLevel, QRUtil } from "./qrcode.js";
 import type { Options } from "./types.js";
 
+// Base interface for basic typing
 interface BaseCanvas {
   width: number;
   height: number;
@@ -18,6 +19,7 @@ interface LogoOptions {
   logoY: number;
 }
 
+// Options that don't have default value
 type ExcludedProperties =
   | "gradient"
   | "background"
@@ -31,11 +33,13 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
   private loadImage;
 
   // Output canvas and context
-  // In browser it is passed with invocation
-  // In Node it is created at runtime
+  // Canvas must be created before calling constructor
   private canvas;
   private canvasContext;
+
+  // qrCode from core library (qrcode.ts)
   private qrCode: QRCodeModel | null = null;
+
   private options: Options | null = null;
 
   static CorrectLevel = QRErrorCorrectLevel;
@@ -69,6 +73,8 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     this.canvasContext = this.canvas.getContext("2d");
   }
 
+  // Function to set options
+  // Can be called multiple times during the lifecyle of this class
   setOptions(options: Options): void {
     if (!options) return;
 
@@ -100,6 +106,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     this.qrCode.make();
   }
 
+  // Promise-base function to draw the qrcode
   draw(): Promise<Buffer | undefined> {
     return new Promise((resolve) => this._draw().then(resolve));
   }
@@ -108,6 +115,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
+  // Removes a portion (a rect) in the canvas
   static _removePortion(canvasContext: any): void {
     const oldGlobalCompositeOperation = canvasContext.globalCompositeOperation;
     const oldFillStyle = canvasContext.fillStyle;
@@ -118,6 +126,8 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     canvasContext.fillStyle = oldFillStyle;
   }
 
+  // Prepares a rect (with rounded corners).
+  // Doesn't take any action further
   static _prepareRoundedCornerClip(
     canvasContext: any,
     x: number,
@@ -135,6 +145,8 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     canvasContext.closePath();
   }
 
+  // Draws a basic dot (with rounded corners)
+  // Color must be selected before
   static _drawDot(
     canvasContext: any,
     left: number,
@@ -154,6 +166,8 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     canvasContext.fill();
   }
 
+  // Draws a tipical telegram dot
+  // Cares about siblings
   static _drawTelegramDot(
     canvasContext: any,
     left: number,
@@ -204,6 +218,8 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     canvasContext.fill();
   }
 
+  // Decides which function to call to draw a dot
+  // Depends on the "drawFunction" option
   private _drawPoint(
     canvasContext: any,
     left: number,
@@ -255,11 +271,12 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     }
   }
 
+  // Draws a single finder
   private _drawFinder(
     canvasContext: any,
     left: number,
     top: number,
-    size: number
+    nSize: number
   ): void {
     if (!this.options) return;
     // range [0-1]
@@ -268,33 +285,34 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     round = clamp(round, 0, 1);
     AwesomeQR._prepareRoundedCornerClip(
       canvasContext,
-      left * size,
-      top * size,
-      7 * size,
-      7 * size,
-      3.5 * round * size
+      left * nSize,
+      top * nSize,
+      7 * nSize,
+      7 * nSize,
+      3.5 * round * nSize
     );
     canvasContext.fill();
     AwesomeQR._prepareRoundedCornerClip(
       canvasContext,
-      (left + 1) * size,
-      (top + 1) * size,
-      5 * size,
-      5 * size,
-      2.5 * round * size
+      (left + 1) * nSize,
+      (top + 1) * nSize,
+      5 * nSize,
+      5 * nSize,
+      2.5 * round * nSize
     );
     AwesomeQR._removePortion(canvasContext);
     AwesomeQR._prepareRoundedCornerClip(
       canvasContext,
-      (left + 2) * size,
-      (top + 2) * size,
-      3 * size,
-      3 * size,
-      1.5 * round * size
+      (left + 2) * nSize,
+      (top + 2) * nSize,
+      3 * nSize,
+      3 * nSize,
+      1.5 * round * nSize
     );
     canvasContext.fill();
   }
 
+  // Draws the foreground canvas (dot, finders and logo)
   private async _drawForeground(): Promise<CanvasLike> {
     if (!this.options || !this.qrCode)
       throw new Error("Must call setOptions before draw");
@@ -550,6 +568,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     return mainCanvas;
   }
 
+  // Draws the background canvas (image, colorBelow and colorAbove)
   private async _drawBackground(): Promise<void> {
     if (!this.options || !this.qrCode)
       throw new Error("Must call setOptions before draw");
@@ -599,6 +618,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     }
   }
 
+  // Draws the qrcode. Merges the foreground with the background
   private async _draw(): Promise<Buffer | undefined> {
     if (!this.options || !this.qrCode)
       throw new Error("Must call setOptions before draw");
