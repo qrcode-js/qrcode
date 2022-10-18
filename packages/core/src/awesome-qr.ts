@@ -25,7 +25,7 @@ type ExcludedProperties =
   | "onEvent"
   | "text";
 
-export class AwesomeQR<Canvas extends BaseCanvas> {
+export class AwesomeQR<CanvasLike extends BaseCanvas> {
   // Functions dependent on environment (Node.js or browser)
   private createCanvas;
   private loadImage;
@@ -58,8 +58,8 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
   };
 
   constructor(
-    canvas: Canvas,
-    createCanvas: (width: number, height: number) => Canvas,
+    canvas: CanvasLike,
+    createCanvas: (width: number, height: number) => CanvasLike,
     loadImage: any
   ) {
     // Save arguments
@@ -69,7 +69,7 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
     this.canvasContext = this.canvas.getContext("2d");
   }
 
-  setOptions(options: Options) {
+  setOptions(options: Options): void {
     if (!options) return;
 
     this.options = options;
@@ -104,11 +104,11 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
     return new Promise((resolve) => this._draw().then(resolve));
   }
 
-  private _clear() {
+  private _clear(): void {
     this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
-  static _removePortion(canvasContext: any) {
+  static _removePortion(canvasContext: any): void {
     const oldGlobalCompositeOperation = canvasContext.globalCompositeOperation;
     const oldFillStyle = canvasContext.fillStyle;
     canvasContext.globalCompositeOperation = "destination-out";
@@ -125,7 +125,7 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
     w: number,
     h: number,
     r: number
-  ) {
+  ): void {
     canvasContext.beginPath();
     canvasContext.moveTo(x, y);
     canvasContext.arcTo(x + w, y, x + w, y + h, r);
@@ -142,7 +142,7 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
     nSize: number,
     scale: number,
     round: number
-  ) {
+  ): void {
     AwesomeQR._prepareRoundedCornerClip(
       canvasContext,
       (left + (1 - scale) / 2) * nSize,
@@ -166,7 +166,7 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
       right: boolean;
       bottom: boolean;
     }
-  ) {
+  ): void {
     const x = left * nSize;
     const y = top * nSize;
     const roundPx = (round * nSize) / 2;
@@ -219,7 +219,7 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
       right: boolean;
       bottom: boolean;
     }
-  ) {
+  ): void {
     if (!this.options) return;
     let scale =
       this.options.dots?.scale ?? AwesomeQR.defaultOptions.dots.scale ?? 1;
@@ -260,7 +260,7 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
     left: number,
     top: number,
     size: number
-  ) {
+  ): void {
     if (!this.options) return;
     // range [0-1]
     let round =
@@ -295,7 +295,7 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
     canvasContext.fill();
   }
 
-  private async _drawForeground(): Promise<Canvas> {
+  private async _drawForeground(): Promise<CanvasLike> {
     if (!this.options || !this.qrCode)
       throw new Error("Must call setOptions before draw");
     /**
@@ -550,7 +550,7 @@ export class AwesomeQR<Canvas extends BaseCanvas> {
     return mainCanvas;
   }
 
-  private async _drawBackground() {
+  private async _drawBackground(): Promise<void> {
     if (!this.options || !this.qrCode)
       throw new Error("Must call setOptions before draw");
     if (!this.options.background) {
