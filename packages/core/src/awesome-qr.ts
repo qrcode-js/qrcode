@@ -73,8 +73,10 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     this.canvasContext = this.canvas.getContext("2d");
   }
 
-  // Function to set options
-  // Can be called multiple times during the lifecyle of this class
+  /**
+   * Function to set options.
+   * Can be called multiple times during the lifecyle of this class.
+   */
   setOptions(options: Options): void {
     if (!options) return;
 
@@ -106,16 +108,24 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     this.qrCode.make();
   }
 
-  // Promise-base function to draw the qrcode
+  /**
+   * Promise-base function to draw the qrcode
+   */
   draw(): Promise<Buffer | undefined> {
     return new Promise((resolve) => this._draw().then(resolve));
   }
 
+  /**
+   * Clears entire canvas
+   */
   private _clear(): void {
     this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
-  // Removes a portion (a rect) in the canvas
+  /**
+   * Removes a portion (a rect) in the canvas
+   * @param canvasContext canvas to work on
+   */
   static _removePortion(canvasContext: any): void {
     const oldGlobalCompositeOperation = canvasContext.globalCompositeOperation;
     const oldFillStyle = canvasContext.fillStyle;
@@ -126,8 +136,17 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     canvasContext.fillStyle = oldFillStyle;
   }
 
-  // Prepares a rect (with rounded corners).
-  // Doesn't take any action further
+  /**
+   * Prepares a rect (with rounded corners).
+   * Doesn't take any action further.
+   *
+   * @param canvasContext Context of the canvas
+   * @param x left margin (in pixels)
+   * @param y top margin (in pixels)
+   * @param w width of the area (in pixels)
+   * @param h height of the area (in pixels)
+   * @param r radius of the rounded corners (in pixels)
+   */
   static _prepareRoundedCornerClip(
     canvasContext: any,
     x: number,
@@ -145,8 +164,17 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     canvasContext.closePath();
   }
 
-  // Draws a basic dot (with rounded corners)
-  // Color must be selected before
+  /**
+   * Draws a basic dot (with rounded corners).
+   * Color must be selected before
+   *
+   * @param canvasContext Context fo the canvas
+   * @param left left margin (in squares)
+   * @param top top margin (in squares)
+   * @param nSize size of a square (in pixels)
+   * @param scale scale of the dot (0..1)
+   * @param round radius for rounded corners (0..1)
+   */
   static _drawDot(
     canvasContext: any,
     left: number,
@@ -166,8 +194,17 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     canvasContext.fill();
   }
 
-  // Draws a tipical telegram dot
-  // Cares about siblings
+  /**
+   * Draws a tipical telegram dot
+   * Cares about siblings
+   *
+   * @param canvasContext Canvas of the context
+   * @param left left margin (in squares)
+   * @param top top margin (in squares)
+   * @param nSize size of a square (in pixels)
+   * @param round radius of rounded corners (0..1)
+   * @param otherCells object containing infos on siblings
+   */
   static _drawTelegramDot(
     canvasContext: any,
     left: number,
@@ -218,8 +255,17 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     canvasContext.fill();
   }
 
-  // Decides which function to call to draw a dot
-  // Depends on the "drawFunction" option
+  /**
+   * Decides which function to call to draw a dot.
+   * Depends on the "drawFunction" option.
+   *
+   * @param canvasContext Context of the canvas
+   * @param left left margin (in squares)
+   * @param top top margin (in squares)
+   * @param nSize size of a square (in pixels)
+   * @param parameters object signaling special dots
+   * @param otherCells object containing infos on siblings
+   */
   private _drawPoint(
     canvasContext: any,
     left: number,
@@ -271,7 +317,14 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     }
   }
 
-  // Draws a single finder
+  /**
+   * Draws a single finder
+   *
+   * @param canvasContext Context of the canvas
+   * @param left left margin (in squares)
+   * @param top top margin (in squares)
+   * @param nSize size of a square (in pixels)
+   */
   private _drawFinder(
     canvasContext: any,
     left: number,
@@ -312,7 +365,11 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     canvasContext.fill();
   }
 
-  // Draws the foreground canvas (dot, finders and logo)
+  /**
+   * Draws the foreground canvas (dot, finders and logo)
+   *
+   * @returns Canvas instance
+   */
   private async _drawForeground(): Promise<CanvasLike> {
     if (!this.options || !this.qrCode)
       throw new Error("Must call setOptions before draw");
@@ -568,7 +625,9 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     return mainCanvas;
   }
 
-  // Draws the background canvas (image, colorBelow and colorAbove)
+  /**
+   * Draws the background canvas (image, colorBelow and colorAbove)
+   */
   private async _drawBackground(): Promise<void> {
     if (!this.options || !this.qrCode)
       throw new Error("Must call setOptions before draw");
@@ -618,7 +677,9 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     }
   }
 
-  // Draws the qrcode. Merges the foreground with the background
+  /**
+   * Draws the qrcode. Merges the foreground with the background.
+   */
   private async _draw(): Promise<Buffer | undefined> {
     if (!this.options || !this.qrCode)
       throw new Error("Must call setOptions before draw");
