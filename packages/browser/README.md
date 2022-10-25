@@ -55,7 +55,7 @@ This is the wrapper around the core package to provide support in browsers.
 ```
 
 ### Svelte
-_After installing '@qrcode-js/browser'._
+
 ```html
 <script>
   import { QRCodeBrowser } from "@qrcode-js/browser";
