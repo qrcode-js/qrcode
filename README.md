@@ -628,7 +628,7 @@ This is the wrapper around the core package to provide support in browsers.
   });
 </script>
 
-<canvas bind:this={canvasElement} />
+<canvas bind:this="{canvasElement}" />
 ```
 
 ### React
