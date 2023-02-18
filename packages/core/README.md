@@ -179,7 +179,25 @@ Scale factor for all dots.
 
 ### drawFunction
 
-**Type** `"telegram" | (( canvasContext: any, left: number, top: number, nSize: number, scale: number, round: number, parameters: { isTiming: boolean; isAlignment: boolean; }, otherCells: { top: boolean; left: boolean; right: boolean; bottom: boolean; } ) => undefined)`
+**Type** `"telegram"
+    | ((
+        canvasContext: any,
+        left: number,
+        top: number,
+        nSize: number,
+        scale: number,
+        round: number,
+        parameters: {
+          isTiming: boolean;
+          isAlignment: boolean;
+        },
+        otherCells: {
+          top: boolean;
+          left: boolean;
+          right: boolean;
+          bottom: boolean;
+        }
+      ) => undefined)`
 
 Custom function to draw a custom shape as a dot in the QR.
 
@@ -220,7 +238,9 @@ Percentage to round the three finder in the QR
 
 ### gradient
 
-**Type** `((ctx: any, size: number) => any) | LinearGradient | RadialGradient`
+**Type** `((ctx: any, size: number) => any)
+    | LinearGradient
+    | RadialGradient`
 
 Function for creating a gradient as foreground color
 
