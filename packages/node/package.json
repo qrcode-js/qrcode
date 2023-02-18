@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@qrcode-js/core": "^0.7.0",
-    "canvas": "^2.9.3",
+    "canvas": "^2.11.0",
     "yargs": "^17.5.1"
   },
   "description": "NodeJs version of the Awesome QR",
