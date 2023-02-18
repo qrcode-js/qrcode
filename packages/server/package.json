@@ -1,0 +1,31 @@
+{
+  "author": "qrcode-js team",
+  "bin": {
+    "qrcode-server": "lib/cli.js"
+  },
+  "bugs": {
+    "url": "https://github.com/qrcode-js/qrcode/issues"
+  },
+  "dependencies": {
+    "@qrcode-js/node": "^1.0.0",
+    "fastify": "^4.13.0"
+  },
+  "description": "",
+  "files": ["lib"],
+  "homepage": "https://github.com/qrcode-js/qrcode",
+  "license": "MIT",
+  "main": "lib/server.js",
+  "name": "@qrcode-js/server",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qrcode-js/qrcode.git"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc -w --preserveWatchOutput",
+    "prepublishOnly": "npm run build",
+    "serve": "node lib/server.js"
+  },
+  "type": "module",
+  "version": "1.0.0"
+}
