@@ -7,7 +7,7 @@
     "url": "https://github.com/qrcode-js/node/issues"
   },
   "dependencies": {
-    "@qrcode-js/core": "^0.7.0",
+    "@qrcode-js/core": "^1.0.0",
     "canvas": "^2.11.0",
     "yargs": "^17.5.1"
   },
@@ -33,5 +33,5 @@
   },
   "type": "module",
   "types": "lib/index.d.ts",
-  "version": "0.7.0"
+  "version": "1.0.0"
 }
