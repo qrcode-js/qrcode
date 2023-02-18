@@ -30,6 +30,8 @@ jobs:
         run: npm ci
       - name: Build packages
         run: npm run build
+      - name: Lint test.ts
+        run: (cd packages/node && npx tsc -p ./tsconfig.lint-test.json)
       - name: Run Tests
         run: |
           npm run test
@@ -54,8 +56,6 @@ jobs:
         run: npx prettier --list-different .
       - name: Run eslint
         run: npx eslint .
-      - name: Lint test.ts
-        run: (cd packages/node && npx tsc -p ./tsconfig.lint-test.json)
       - name: Run update-readme
         run: npm run update-readme
       - name: Run prettier on Readmes
