@@ -9,8 +9,11 @@ on:
     - cron: "0 0 * * *"
 
 jobs:
-  tests:
-    name: Tests
+  build:
+    strategy:
+      matrix:
+        node_version: [16, 18]
+    name: Build with Node ${{ matrix.node_version }}
     runs-on: ubuntu-latest
     permissions:
       actions: read
@@ -19,15 +22,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
+      - name: Setup Node v${{ matrix.node_version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node_version }}
       - name: Install deps
         run: npm ci
       - name: Build packages
         run: npm run build
-      - name: Run prettier
-        run: npx prettier --list-different .
-      - name: Run eslint
-        run: npx eslint .
       - name: Lint test.ts
         run: (cd packages/node && npx tsc -p ./tsconfig.lint-test.json)
       - name: Run Tests
@@ -38,6 +40,22 @@ jobs:
         run: |
           node packages/node/lib/cli.js --opt.color white --opt.finder.round 0.5 qrcode-cli.png
           test -f qrcode-cli.png || (echo "File not found" && exit 1)
+
+  general-checks:
+    name: Run general checks
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Install deps
+        run: npm ci
+      - name: Run prettier
+        run: npx prettier --list-different .
+      - name: Run eslint
+        run: npx eslint .
       - name: Run update-readme
         run: npm run update-readme
       - name: Run prettier on Readmes
