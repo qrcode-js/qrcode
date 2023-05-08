@@ -5,7 +5,7 @@
   },
   "description": "An awesome but simple QR code generator written in JavaScript.",
   "devDependencies": {
-    "@types/node": "^18.14.0"
+    "@types/node": "^20.1.1"
   },
   "files": ["lib"],
   "homepage": "https://github.com/qrcode-js/qrcode#readme",
