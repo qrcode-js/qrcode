@@ -8,7 +8,7 @@
   },
   "description": "Browser version of the Awesome QR",
   "devDependencies": {
-    "concurrently": "^7.3.0",
+    "concurrently": "^8.2.0",
     "webpack": "^5.76.0",
     "webpack-cli": "^5.0.1"
   },
