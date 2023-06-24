@@ -29,7 +29,6 @@
   "scripts": {
     "build": "lerna run build",
     "dev": "lerna run dev --parallel",
-    "install": "lerna bootstrap",
     "lint": "eslint --fix .",
     "postupdate-readme": "prettier --write **/*.md",
     "preversion": "npm run update-readme && git add *.md",
