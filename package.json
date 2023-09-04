@@ -12,8 +12,8 @@
     "husky": "^8.0.1",
     "lerna": "^7.0.2",
     "lint-staged": "^14.0.0",
-    "prettier": "^2.7.1",
-    "prettier-plugin-sort-json": "^2.0.0",
+    "prettier": "^3.0.3",
+    "prettier-plugin-sort-json": "^3.0.1",
     "ts-loader": "^9.0.0",
     "ts-node": "^10.0.0",
     "typescript": "^5.1.3"
