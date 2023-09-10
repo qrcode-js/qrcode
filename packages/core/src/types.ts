@@ -118,7 +118,7 @@ export type Options = {
           left: boolean;
           right: boolean;
           bottom: boolean;
-        }
+        },
       ) => undefined);
 
   /**

@@ -29,7 +29,7 @@ async function main() {
   await Promise.all([
     fs.writeFile(
       "./packages/core/README.md",
-      doNotEditMessage + "\n" + coreDocTemplate
+      doNotEditMessage + "\n" + coreDocTemplate,
     ),
     fs.writeFile("./README.md", doNotEditMessage + "\n" + rootDocTemplate),
   ]);
@@ -42,7 +42,7 @@ async function generateAPIDocs() {
   const parser = ts.createSourceFile(
     "parser.ts",
     sourceCode,
-    ts.ScriptTarget.ES2021
+    ts.ScriptTarget.ES2021,
   );
   var code = "";
   var text = "";
@@ -87,10 +87,10 @@ function handleTypeLiteral(child, sourceCode, prefix, indent = 0) {
     if (a.questionToken && !b.questionToken) return 1;
     if (!a.questionToken && b.questionToken) return -1;
     const AisDeprecated = a.jsDoc?.[0].tags?.some(
-      (t) => t.tagName.escapedText == "deprecated"
+      (t) => t.tagName.escapedText == "deprecated",
     );
     const BisDeprecated = b.jsDoc?.[0].tags?.some(
-      (t) => t.tagName.escapedText == "deprecated"
+      (t) => t.tagName.escapedText == "deprecated",
     );
     if (AisDeprecated && !BisDeprecated) return 1;
     if (!AisDeprecated && BisDeprecated) return -1;
@@ -105,7 +105,7 @@ function handleTypeLiteral(child, sourceCode, prefix, indent = 0) {
         m,
         sourceCode,
         m.name.escapedText,
-        indent + 2
+        indent + 2,
       );
       codeType = _code;
       text += _text;
@@ -130,12 +130,12 @@ function handleTypeLiteral(child, sourceCode, prefix, indent = 0) {
 function createCode(member, type, indent) {
   var code = [];
   const deprecated = member.jsDoc?.[0].tags?.some(
-    (t) => t.tagName.escapedText == "deprecated"
+    (t) => t.tagName.escapedText == "deprecated",
   );
   code.push(
     `  ${member.name.escapedText}${member.questionToken ? "?" : ""}: ${type};${
       deprecated ? "  // DEPRECATED" : ""
-    }`
+    }`,
   );
   return code.join(" ".repeat(indent) + "\n");
 }

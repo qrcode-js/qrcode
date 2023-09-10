@@ -212,7 +212,7 @@ export class QRCodeModel {
       this.dataCache = QRCodeModel.createData(
         this.typeNumber,
         this.errorCorrectLevel,
-        this.dataList
+        this.dataList,
       );
     }
     this.mapData(this.dataCache, maskPattern);
@@ -377,7 +377,7 @@ export class QRCodeModel {
   static createData(
     typeNumber: number,
     errorCorrectLevel: number,
-    dataList: QR8bitByte[]
+    dataList: QR8bitByte[],
   ): number[] {
     const rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectLevel);
     const buffer = new QRBitBuffer();
@@ -386,7 +386,7 @@ export class QRCodeModel {
       buffer.put(data.mode, 4);
       buffer.put(
         data.getLength(),
-        QRUtil.getLengthInBits(data.mode, typeNumber)
+        QRUtil.getLengthInBits(data.mode, typeNumber),
       );
       data.write(buffer);
     }
@@ -398,7 +398,7 @@ export class QRCodeModel {
       throw new Error(
         `code length overflow. (${buffer.getLengthInBits()}>${
           totalDataCount * 8
-        })`
+        })`,
       );
     }
     if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
@@ -793,7 +793,7 @@ class QRPolynomial {
     for (let i = 0; i < this.getLength(); i++) {
       for (let j = 0; j < e.getLength(); j++) {
         num[i + j] ^= QRMath.gexp(
-          QRMath.glog(this.get(i)) + QRMath.glog(e.get(j))
+          QRMath.glog(this.get(i)) + QRMath.glog(e.get(j)),
         );
       }
     }
@@ -990,12 +990,12 @@ class QRRSBlock {
 
   static getRSBlocks(
     typeNumber: number,
-    errorCorrectLevel: number
+    errorCorrectLevel: number,
   ): QRRSBlock[] {
     const rsBlock = QRRSBlock.getRsBlockTable(typeNumber, errorCorrectLevel);
     if (rsBlock == undefined) {
       throw new Error(
-        `bad rs block @ typeNumber:${typeNumber}/errorCorrectLevel:${errorCorrectLevel}`
+        `bad rs block @ typeNumber:${typeNumber}/errorCorrectLevel:${errorCorrectLevel}`,
       );
     }
     const length = rsBlock.length / 3;

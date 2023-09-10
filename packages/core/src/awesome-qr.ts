@@ -64,7 +64,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
   constructor(
     canvas: CanvasLike,
     createCanvas: (width: number, height: number) => CanvasLike,
-    loadImage: any
+    loadImage: any,
   ) {
     // Save arguments
     this.canvas = canvas;
@@ -103,7 +103,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     }
 
     this.qrCode.addData(
-      this.options.text || "https://github.com/qrcode-js/qrcode"
+      this.options.text || "https://github.com/qrcode-js/qrcode",
     );
     this.qrCode.make();
   }
@@ -153,7 +153,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     y: number,
     w: number,
     h: number,
-    r: number
+    r: number,
   ): void {
     canvasContext.beginPath();
     canvasContext.moveTo(x, y);
@@ -181,7 +181,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     top: number,
     nSize: number,
     scale: number,
-    round: number
+    round: number,
   ): void {
     AwesomeQR._prepareRoundedCornerClip(
       canvasContext,
@@ -189,7 +189,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
       (top + (1 - scale) / 2) * nSize,
       scale * nSize,
       scale * nSize,
-      0.5 * scale * round * nSize
+      0.5 * scale * round * nSize,
     );
     canvasContext.fill();
   }
@@ -216,7 +216,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
       left: boolean;
       right: boolean;
       bottom: boolean;
-    }
+    },
   ): void {
     const x = left * nSize;
     const y = top * nSize;
@@ -228,28 +228,28 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
       y,
       x + nSize,
       y + nSize,
-      otherCells.top || otherCells.right ? 0 : roundPx
+      otherCells.top || otherCells.right ? 0 : roundPx,
     );
     canvasContext.arcTo(
       x + nSize,
       y + nSize,
       x,
       y + nSize,
-      otherCells.bottom || otherCells.right ? 0 : roundPx
+      otherCells.bottom || otherCells.right ? 0 : roundPx,
     );
     canvasContext.arcTo(
       x,
       y + nSize,
       x,
       y,
-      otherCells.bottom || otherCells.left ? 0 : roundPx
+      otherCells.bottom || otherCells.left ? 0 : roundPx,
     );
     canvasContext.arcTo(
       x,
       y,
       x + nSize,
       y,
-      otherCells.top || otherCells.left ? 0 : roundPx
+      otherCells.top || otherCells.left ? 0 : roundPx,
     );
     canvasContext.closePath();
     canvasContext.fill();
@@ -280,7 +280,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
       left: boolean;
       right: boolean;
       bottom: boolean;
-    }
+    },
   ): void {
     if (!this.options) return;
     let scale =
@@ -299,7 +299,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
         top,
         nSize,
         round,
-        otherCells
+        otherCells,
       );
     } else if (typeof drawFunction === "function") {
       return drawFunction(
@@ -310,7 +310,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
         scale,
         round,
         parameters,
-        otherCells
+        otherCells,
       );
     } else {
       return AwesomeQR._drawDot(canvasContext, left, top, nSize, scale, round);
@@ -329,7 +329,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     canvasContext: any,
     left: number,
     top: number,
-    nSize: number
+    nSize: number,
   ): void {
     if (!this.options) return;
     // range [0-1]
@@ -342,7 +342,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
       top * nSize,
       7 * nSize,
       7 * nSize,
-      3.5 * round * nSize
+      3.5 * round * nSize,
     );
     canvasContext.fill();
     AwesomeQR._prepareRoundedCornerClip(
@@ -351,7 +351,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
       (top + 1) * nSize,
       5 * nSize,
       5 * nSize,
-      2.5 * round * nSize
+      2.5 * round * nSize,
     );
     AwesomeQR._removePortion(canvasContext);
     AwesomeQR._prepareRoundedCornerClip(
@@ -360,7 +360,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
       (top + 2) * nSize,
       3 * nSize,
       3 * nSize,
-      1.5 * round * nSize
+      1.5 * round * nSize,
     );
     canvasContext.fill();
   }
@@ -404,7 +404,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
     }
 
     const alignmentPatternCenters = QRUtil.getPatternPosition(
-      this.qrCode.typeNumber
+      this.qrCode.typeNumber,
     );
 
     let logoOptions: LogoOptions | null = null;
@@ -525,7 +525,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
                   this.qrCode.isDark(row + 1, col) &&
                   !isInLogoZone(row + 1, col)) ||
                 false,
-            }
+            },
           );
         }
       }
@@ -543,7 +543,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
         gradient = grad;
       } else {
         console.error(
-          "Returned object from gradient function does not seem to be a Gradient"
+          "Returned object from gradient function does not seem to be a Gradient",
         );
       }
     } else if (typeof this.options.gradient === "object") {
@@ -553,7 +553,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
           0,
           0,
           direction === "to-right" ? size : 0,
-          direction === "to-bottom" ? size : 0
+          direction === "to-bottom" ? size : 0,
         );
       } else {
         gradient = mainCanvasContext.createRadialGradient(
@@ -562,7 +562,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
           0,
           size / 2,
           size / 2,
-          (size / 2) * Math.SQRT2
+          (size / 2) * Math.SQRT2,
         );
       }
       for (const colorStop of this.options.gradient.colorStops) {
@@ -603,7 +603,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
         logoSpaceHeight,
         logoCornerRound *
           0.5 *
-          (isHeightMinor ? logoSpaceHeight : logoSpaceWidth)
+          (isHeightMinor ? logoSpaceHeight : logoSpaceWidth),
       );
       mainCanvasContext.clip();
       mainCanvasContext.drawImage(
@@ -611,7 +611,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
         logoOptions.logoX,
         logoOptions.logoY,
         logoSpaceWidth,
-        logoSpaceHeight
+        logoSpaceHeight,
       );
     }
 
@@ -648,19 +648,19 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
         bgMargin,
         bgMargin,
         size - 2 * bgMargin,
-        size - 2 * bgMargin
+        size - 2 * bgMargin,
       );
     }
     if (this.options.background.image) {
       const backgroundImage = await this.loadImage(
-        this.options.background.image
+        this.options.background.image,
       );
       this.canvasContext.drawImage(
         backgroundImage,
         bgMargin,
         bgMargin,
         size - 2 * bgMargin,
-        size - 2 * bgMargin
+        size - 2 * bgMargin,
       );
     }
     if (this.options.background.colorAbove) {
@@ -669,7 +669,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
         bgMargin,
         bgMargin,
         size - 2 * bgMargin,
-        size - 2 * bgMargin
+        size - 2 * bgMargin,
       );
     }
     if (this.options.onEvent) {
@@ -704,7 +704,7 @@ export class AwesomeQR<CanvasLike extends BaseCanvas> {
       margin,
       margin,
       size - 2 * margin,
-      size - 2 * margin
+      size - 2 * margin,
     );
 
     // Fill the margin

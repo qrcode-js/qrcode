@@ -223,7 +223,7 @@ Scale factor for all dots.
           left: boolean;
           right: boolean;
           bottom: boolean;
-        }
+        },
       ) => undefined)`
 
 Custom function to draw a custom shape as a dot in the QR.

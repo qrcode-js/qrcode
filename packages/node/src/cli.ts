@@ -8,7 +8,7 @@ async function main(): Promise<void> {
   yargs(hideBin(process.argv))
     .scriptName("qrcode")
     .usage(
-      "$0 <output_path> [options...]\n\nAll options are prefixed with '--opt.'. Example: --opt.text 'this is a text', or --opt.margin.size 40"
+      "$0 <output_path> [options...]\n\nAll options are prefixed with '--opt.'. Example: --opt.text 'this is a text', or --opt.margin.size 40",
     )
     .command(
       "$0 <output_path>",
@@ -20,7 +20,7 @@ async function main(): Promise<void> {
           default: {},
         });
       },
-      handleDefaultCommand
+      handleDefaultCommand,
     )
     .wrap(null)
     .strict()
@@ -33,7 +33,7 @@ function handleDefaultCommand(args: any) {
   myQR.draw().then((d) => {
     if (!d) {
       console.error(
-        "Error. Received undefined despite being on Node. Please report this!"
+        "Error. Received undefined despite being on Node. Please report this!",
       );
       return;
     }

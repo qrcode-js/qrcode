@@ -42,7 +42,7 @@ async function init() {
   await myQR.draw().then((d) => {
     if (!d) {
       console.error(
-        "Error. Received undefined despite being on Node. Please report this!"
+        "Error. Received undefined despite being on Node. Please report this!",
       );
       return;
     }
