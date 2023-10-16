@@ -11,7 +11,7 @@
     "eslint-config-prettier": "^9.0.0",
     "husky": "^8.0.1",
     "lerna": "^7.0.2",
-    "lint-staged": "^14.0.0",
+    "lint-staged": "^15.0.1",
     "prettier": "^3.0.3",
     "prettier-plugin-sort-json": "^3.0.1",
     "ts-loader": "^9.0.0",
