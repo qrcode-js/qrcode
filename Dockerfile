@@ -15,5 +15,6 @@ ENTRYPOINT node packages/node/lib/cli.js
 
 FROM deps-prod as final
 WORKDIR /app
-COPY --from=build
+COPY --from=build packages/** ./
+
 
