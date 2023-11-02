@@ -49,8 +49,8 @@ jobs:
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
-          push: false
-          load: true
+          push: true
+          # load: true
           platforms: ${{ steps.qemu.outputs.platforms }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
