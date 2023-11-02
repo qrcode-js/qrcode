@@ -55,7 +55,16 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: false
-          # load: true
+          platforms: ${{ env.PLATFORMS }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Push Docker image to registry
+        uses: docker/build-push-action@v5
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          push: true
           platforms: ${{ env.PLATFORMS }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -76,10 +85,3 @@ jobs:
       #     else
       #       exit 1
       #     fi
-      # - name: Push to ghcr.io with retries
-      #   if: startsWith(github.ref, 'refs/tags/v')
-      #   uses: nick-invision/retry@v2
-      #   with:
-      #     timeout_minutes: 3
-      #     max_attempts: 3
-      #     command: echo "${{ steps.meta.outputs.tags }}" | while IFS= read -r i; do echo "Pushing $i"; docker push $i; done
