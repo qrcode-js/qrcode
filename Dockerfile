@@ -23,7 +23,9 @@ RUN npm run build
 # Final stage, build up app
 FROM node:lts-slim as final
 WORKDIR /app
+RUN apt-get update
+RUN apt-get install libcairo2 libpango1.0 librsvg2-dev -y
 COPY --from=deps-prod /app/node_modules ./node_modules/
 COPY --from=build /app/packages ./packages
-ENTRYPOINT node packages/node/lib/cli.js
+ENTRYPOINT ["node", "packages/node/lib/cli.js"]
 
