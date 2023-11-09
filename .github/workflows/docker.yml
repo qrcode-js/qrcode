@@ -17,9 +17,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
-permissions:
-  packages: write
-
 env:
   PLATFORMS: "linux/amd64,linux/arm/v7,linux/arm64/v8"
 
