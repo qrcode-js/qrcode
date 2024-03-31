@@ -18,14 +18,14 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "ES2021",
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": true
   },
   "exclude": ["node_modules", "lib", "dist"],
   "ts-node": {
     "esm": true,
-    "transpileOnly": true,
+    "transpileOnly": true
   },
   "typeAcquisition": {
-    "enable": true,
-  },
+    "enable": true
+  }
 }
