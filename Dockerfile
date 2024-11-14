@@ -1,5 +1,5 @@
 # This stage gets only package*.json files
-FROM node:lts-slim as node-files
+FROM node:20-slim as node-files
 WORKDIR /app
 COPY . .
 RUN find . -not -name "package*.json" -type f -delete
