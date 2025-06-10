@@ -18,7 +18,7 @@ FROM deps-prod as build
 WORKDIR /app
 RUN npm i --include=dev
 COPY . .
-RUN npm run build
+RUN NODE_OPTIONS="--max-old-space-size=4096" npm run build
 
 # Final stage, build up app
 FROM node:20-slim as final
