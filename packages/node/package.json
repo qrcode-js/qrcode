@@ -8,16 +8,23 @@
   },
   "dependencies": {
     "@qrcode-js/core": "^1.2.0",
-    "canvas": "^3.0.0",
+    "canvas": "^3.2.3",
     "yargs": "^18.0.0"
   },
   "description": "NodeJs version of the Awesome QR",
   "devDependencies": {
     "@types/yargs": "^17.0.12"
   },
-  "files": ["lib", "!**/test.*"],
+  "files": [
+    "lib",
+    "!**/test.*"
+  ],
   "homepage": "https://github.com/qrcode-js/qrcode#readme",
-  "keywords": ["qr", "qrcode", "node"],
+  "keywords": [
+    "qr",
+    "qrcode",
+    "node"
+  ],
   "license": "MIT",
   "main": "lib/index.js",
   "name": "@qrcode-js/node",
